@@ -1,26 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+import './App.css';
+import ButtonAppBar from './component/UI/MUI/ButtonAppBar';
+import UserForm from './component/Form/UserForm';
+import Layout from './container/Layout'
+import AuthContextProvider from './context/auth-context';
+
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AuthContextProvider>
+        <ButtonAppBar />
+        <UserForm />
+      </AuthContextProvider>
+      {/* <Layout /> */}
     </div>
   );
-}
+};
 
 export default App;
