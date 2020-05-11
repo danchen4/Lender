@@ -40,19 +40,17 @@ const MySelect = ({ label, required, ...props }) => {
 
   return (
     <React.Fragment>
-      <FormControl    
+      <FormControl
         className={
           meta.error && meta.touched
             ? `${classes.formSelect} ${classModule.Shake}`
             : classes.formSelect
-        }     
+        }
         required={required}
-        error={!!errorText}>
+        error={!!errorText}
+      >
         <FormGroup row>
-            <FormControlLabel
-              control={<Checkbox {...fieldprops } />}
-              label={label} 
-            />
+          <FormControlLabel control={<Checkbox {...fieldprops} />} label={label} />
         </FormGroup>
         <FormHelperText>{errorText}</FormHelperText>
       </FormControl>
@@ -62,7 +60,6 @@ const MySelect = ({ label, required, ...props }) => {
 
 MySelect.propTypes = {
   label: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
   required: PropTypes.bool,
 };
 

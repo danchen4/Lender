@@ -1,0 +1,41 @@
+.fadeEnter {
+  opacity: 0;
+  /* transform: translateX(-100%); */
+}
+
+.fadeEnterActive {
+  opacity: 1;
+  /* transform: translateX(0%); */
+  transition: all 200ms ease-in;
+}
+
+.fadeExit {
+  opacity: 1;
+  /* transform: translateX(0%); */
+}
+
+.fadeExitActive {
+  opacity: 0;
+  /* transform: translateX(100%); */
+  transition: all 200ms ease-out;
+}
+
+.fadeAppear {
+  opacity: 0;
+}
+
+.fadeAppearActive {
+  opacity: 1;
+  transition: all 200ms ease-in;
+}
+
+.TransitionGroup {
+  position: relative;
+}
+
+.RouteSection {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}

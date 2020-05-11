@@ -1,0 +1,39 @@
+.CardHeader {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  height: 30px;
+  width: 100%;
+  background-image: linear-gradient(to right, rgba(183, 185, 232, 1) 60%, rgba(160, 162, 210, 1));
+  padding: 0.4rem;
+}
+
+.CardBody {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  align-content: flex-end;
+  padding: 1rem;
+  height: 100%;
+}
+
+.CardSection {
+  width: 100%;
+}
+
+.CardSectionHeader {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #999ba0;
+}
+
+.Darken {
+  color: #585858;
+}
+
+@media (min-width: 500px) {
+  .CardSection {
+    width: 70%;
+  }
+}

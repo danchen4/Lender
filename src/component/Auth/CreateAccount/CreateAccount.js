@@ -1,29 +1,34 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as actionAuth from '../../../store/actions/index';
 import { Link } from 'react-router-dom';
 
-import { Button, Typography, Paper } from '@material-ui/core';
+import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { customTheme } from '../../../theme';
-
-import { Formik, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import { purple } from '@material-ui/core/colors';
 
 import MyTextField from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import MyPasswordTextField from '../../UI/FormikMUI/fkmui-textfield-password/fkmui-textfield-password';
-import Spinner from '../../UI/CustomUI/Spinner/Spinner';
 
-import classModule from './CreateAccount.module.css'
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+
+import classModule from './CreateAccount.module.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: '30px',
   },
+  box: {
+    padding: '0.5rem',
+  },
   paper: {
-    width: '500px',
+    maxWidth: '600px',
     margin: 'auto',
     borderRadius: '6px',
-    padding: theme.spacing(5),
+    padding: theme.spacing(3),
   },
   textField: {
     width: '90%',
@@ -35,27 +40,37 @@ const useStyles = makeStyles((theme) => ({
     margin: '1rem',
     backgroundColor: customTheme.palette.primary.dark,
   },
-  errorMessage: {
-    color: 'salmon',
-    margin: '16px 0',
-  }
+  valueDisplay: {
+    marginTop: '40px',
+    width: '500px',
+    margin: 'auto',
+    textAlign: 'left',
+  },
+  buttonProgress: {
+    color: purple[200],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
 }));
 
 const lowerCaseRegex = /(?=.*[a-z])/;
 const upperCaseRegex = /(?=.*[A-Z])/;
 const numericCaseRegex = /(?=.*[0-9])/;
 
-
 const validationSchema = Yup.object({
   email: Yup.string().email().required(),
-  password: Yup
-    .string()
-    .matches(lowerCaseRegex,'Password must contain at least 1 lowercase character')
-    .matches(upperCaseRegex,'Password must contain at least 1 UPPERCASE character')
-    .matches(numericCaseRegex,'Password must contain at least 1 number')
+  password: Yup.string()
+    .matches(lowerCaseRegex, 'Password must contain at least 1 lowercase character')
+    .matches(upperCaseRegex, 'Password must contain at least 1 UPPERCASE character')
+    .matches(numericCaseRegex, 'Password must contain at least 1 number')
     .min(6, 'Password must be at least 6 characters')
     .required(),
-  passwordConfirm: Yup.string().oneOf([Yup.ref('password')], 'Password must match').required('Password must match'),
+  passwordConfirm: Yup.string()
+    .oneOf([Yup.ref('password')], 'Password must match')
+    .required('Password must match'),
 });
 
 const initialValues = {
@@ -64,14 +79,33 @@ const initialValues = {
   passwordConfirm: '',
 };
 
-const FormUserName = (props) => {
+const CreateAccount = (props) => {
   console.log('<CreatAccount /> RENDER');
   const classes = useStyles();
+  // const authContext = useContext(AuthContext);
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const loadingREDUX = useSelector((state) => state.auth.loading);
+  const onLogin = (values, actions, isSignUp) =>
+    dispatch(actionAuth.loginAccount(values, actions, isSignUp));
+  // const onSetRedirectPath = (path) => dispatch(actionAuth.setAuthRedirectPath(path));
 
   const nextStep = () => {
     props.history.push({ pathname: '/personalinfo' });
+  };
+
+  const submitHandler = async (values, actions, isSignUp) => {
+    // setIsLoading(true);
+    actions.setSubmitting(true);
+    setTimeout(() => {
+      onLogin(values, actions, isSignUp);
+      actions.setSubmitting(false);
+      actions.resetForm();
+      // setIsLoading(false);
+      nextStep();
+    }, 1500);
   };
 
   return (
@@ -79,104 +113,64 @@ const FormUserName = (props) => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={async (data, helpers) => {
-          const authData = {
-            email: data.email,
-            password: data.password,
-            returnSecureToken: true,
-          };
-          let url =
-            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBsThRZYZdkCxZOt2QXRDW6ARulOx6VN74';
-          // helpers.setSubmitting(true);
-          axios
-            .post(url, authData)
-            .then((response) => {
-              console.log(response.data);
-              helpers.setSubmitting(false);
-              helpers.resetForm();
-              nextStep();
-            })
-            .catch((err) => {
-              console.log(err.response);
-              if (err.response.data.error.message === 'EMAIL_EXISTS') {
-                helpers.setErrors({ email: 'Email already exists' });
-              }
-              // helpers.setFieldError('email', 'goodbye');
-            });
+        onSubmit={(actions, values) => {
+          submitHandler(actions, values, true);
         }}
       >
-        {({ values, errors, isSubmitting }) => (
-          <Paper className={classes.paper} elevation={2}>
-            <Typography variant="h4" color="secondary">
-              Create An Account
-            </Typography>
-            <Form>
-              <div className={classes.spacer}>
-                <div className={classes.errorMessage}>
-                  <ErrorMessage name="email" />
+        {({ values, errors, isSubmitting, dirty, isValid }) => (
+          <Box component="div" className={classes.box}>
+            <Paper className={classes.paper} elevation={2}>
+              <Typography variant="h4" color="secondary">
+                Create An Account
+              </Typography>
+              <Form>
+                <div className={classes.spacer}>
+                  <MyTextField name="email" label="Email" customStyle={{ width: '100%' }} />
                 </div>
-                <MyTextField name="email" label="Email" customStyle={{ width: '100%' }} />
-              </div>
 
-              <div className={classes.spacer}>
-                <div className={classes.errorMessage}>
-                    <ErrorMessage name="password" />
+                <div className={classes.spacer}>
+                  <MyPasswordTextField
+                    name="password"
+                    label="Password"
+                    required
+                    customStyle={{ width: '100%' }}
+                  />
                 </div>
-                <MyPasswordTextField name="password" label="Password" required customStyle={{ width: '100%' }} />
-              </div>
 
-              <div className={classes.spacer}>
-                <div className={classes.errorMessage}>
-                    <ErrorMessage name="passwordConfirm" />
+                <div className={classes.spacer}>
+                  <MyPasswordTextField
+                    name="passwordConfirm"
+                    label="Confirm Password"
+                    required
+                    customStyle={{ width: '100%' }}
+                  />
                 </div>
-                <MyPasswordTextField name="passwordConfirm" label="Confirm Password" required customStyle={{width: '100%'}} />
-              </div>
 
-              {isLoading ? (
-                <Spinner />
-              ) : (
                 <Button
                   variant="contained"
                   color="secondary"
                   size="large"
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={!dirty || !isValid || loadingREDUX}
                 >
                   Sign Up
                 </Button>
-              )}
+                {loadingREDUX && <CircularProgress size={24} className={classes.buttonProgress} />}
 
-              <div className={`${classes.spacer} ${classModule.AccountSwitch}`}>
-                <p>Already have an account?</p>
-                <Link to="/login">Sign In</Link>
-              </div>
+                <div className={`${classes.spacer} ${classModule.AccountSwitch}`}>
+                  <p>Already have an account?</p>
+                  <Link to="/login">Sign In</Link>
+                </div>
 
-              <pre
-                style={{
-                  marginTop: '40px',
-                  width: '500px',
-                  margin: 'auto',
-                  textAlign: 'left',
-                }}
-              >
-                {JSON.stringify(values, null, 4)}
-              </pre>
-              <pre
-                style={{
-                  marginTop: '40px',
-                  width: '500px',
-                  margin: 'auto',
-                  textAlign: 'left',
-                }}
-              >
-                {JSON.stringify(errors, null, 4)}
-              </pre>
-            </Form>
-          </Paper>
+                <pre className={classes.valueDisplay}>{JSON.stringify(values, null, 4)}</pre>
+                <pre className={classes.valueDisplay}>{JSON.stringify(errors, null, 4)}</pre>
+              </Form>
+            </Paper>
+          </Box>
         )}
       </Formik>
     </div>
   );
 };
 
-export default FormUserName;
+export default CreateAccount;

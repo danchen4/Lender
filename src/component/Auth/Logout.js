@@ -1,17 +1,17 @@
-import React, { useEffect, useContext } from 'react'
-import {Redirect} from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import * as actions from '../../store/actions/index';
+import { Redirect } from 'react-router-dom';
 
-import {AuthContext} from '../../context/auth-context';
+const Logout = (props) => {
+  const dispatch = useDispatch();
+  const onSetLogoutAccount = () => dispatch(actions.logoutAccount());
 
-const Logout = ({onLogout}) => {
-  const authContext = useContext(AuthContext)
+  useEffect(() => {
+    onSetLogoutAccount();
+  }, []);
 
-  useEffect(()=>{
-    authContext.logoutAccount();
-  },[authContext])
-
-  return <Redirect to="/login"/>
-}
+  return <Redirect to="/login" />;
+};
 
 export default Logout;
-

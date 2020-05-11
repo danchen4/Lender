@@ -10,7 +10,6 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { customTheme } from '../../theme';
@@ -20,8 +19,7 @@ import { customTheme } from '../../theme';
 import { Formik, Form, Field, useField, FieldArray, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 
-import MyTextField from '../UI/FormikMUI/fkmui-textfield-outline'
-
+import MyTextField from '../UI/FormikMUI/fkmui-textfield-outline';
 
 const useStyles = makeStyles({
   root: {
@@ -51,8 +49,7 @@ const MyRadio = ({ label, ...props }) => {
 const MyCheckbox = ({ label, ...props }) => {
   const [field] = useField(props);
   return <FormControlLabel control={<Checkbox {...field} />} label={label} />;
-}
-
+};
 
 const initialValues = {
   firstName: '',
@@ -72,7 +69,7 @@ const validationSchema = yup.object({
   firstName: yup.string().required().max(10).min(2),
   email: yup.string().email().required(),
   termsAgree: yup.boolean().oneOf([true]),
-  cookies: yup.array(yup.string().oneOf(['chocolate chip','snicker','sugar'])).min(1),
+  cookies: yup.array(yup.string().oneOf(['chocolate chip', 'snicker', 'sugar'])).min(1),
   pets: yup.array().of(
     yup.object({
       name: yup.string().required(),
@@ -102,7 +99,7 @@ const FormUserName = (props) => {
         //   return errors;
         // }}
         validationSchema={validationSchema}
-        onSubmit={(data, formikHelpers ) => {
+        onSubmit={(data, formikHelpers) => {
           formikHelpers.setSubmitting(true);
           nextStep();
           //make async call, loading, disable submit
@@ -136,14 +133,20 @@ const FormUserName = (props) => {
             <div className={classes.spacer}>
               <MyTextField name="email" label="email" type="email" />
             </div>
-           
+
             <div className={classes.spacer}>
-              <MyCheckbox name="termsAgree" type="checkbox" label="Do you agree to the terms and conditions?" />
-              <ErrorMessage name="termsAgree">You must agree to the terms and conditions</ErrorMessage>
+              <MyCheckbox
+                name="termsAgree"
+                type="checkbox"
+                label="Do you agree to the terms and conditions?"
+              />
+              <ErrorMessage name="termsAgree">
+                You must agree to the terms and conditions
+              </ErrorMessage>
             </div>
 
             <div className={classes.spacer}>
-              <Field name="cookies" type="checkbox" value="chocolate chip" as={Checkbox}/>
+              <Field name="cookies" type="checkbox" value="chocolate chip" as={Checkbox} />
               <label>chocolate chip</label>
               <Field name="cookies" type="checkbox" value="snicker" as={Checkbox} />
               <label>snicker</label>
@@ -151,7 +154,6 @@ const FormUserName = (props) => {
               <label>sugar</label>
             </div>
 
-            
             <div className={classes.spacer}>
               <MyRadio name="pies" type="radio" value="blueberry" label="blueberry" />
               <MyRadio name="pies" type="radio" value="apple" label="apple" />
