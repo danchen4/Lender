@@ -11,6 +11,8 @@ import * as Yup from 'yup';
 import MyTextField from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import MyCheckbox from '../../UI/FormikMUI/fkmui-checkbox/fkmui-checkbox';
 
+import useTraceUpdate from '../../../hooks/trace-update';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: '30px',
@@ -40,11 +42,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FormUserName = (props) => {
+  console.log('<Signature /> RENDER');
+  console.log('<Signature />   match', props.match);
+  useTraceUpdate(props);
+
   const classes = useStyles();
-  const { pathNext, pathPrev } = props;
+  const { pathNext, pathPrev, history } = props;
 
   const personalDataREDUX = useSelector((state) => state.application.personalData);
-  console.log('<Signature /> RENDER', personalDataREDUX);
 
   const initialValues = {
     agreeTerms: false,
@@ -65,21 +70,17 @@ const FormUserName = (props) => {
   });
 
   const nextStep = () => {
-    props.history.push({ pathname: pathNext });
+    console.log('<FormSignature /> next steps');
+    history.push({ pathname: pathNext });
   };
 
   const prevStep = () => {
-    props.history.push({ pathname: pathPrev });
+    history.push({ pathname: pathPrev });
   };
 
-  const submitHandler = async (values, actions) => {
-    actions.setSubmitting(true);
-    await setTimeout(() => {
-      console.log('data onSubmit', values);
-      actions.setSubmitting(false);
-      actions.resetForm();
-      nextStep();
-    }, 1000);
+  const submitHandler = (values, actions) => {
+    actions.resetForm();
+    nextStep();
   };
 
   return (
@@ -142,7 +143,7 @@ const FormUserName = (props) => {
                   color="secondary"
                   size="large"
                   type="submit"
-                  disabled={!dirty || !isValid || isSubmitting}
+                  disabled={!dirty || !isValid}
                 >
                   Review Application
                 </Button>

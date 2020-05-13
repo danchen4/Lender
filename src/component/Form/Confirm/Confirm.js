@@ -2,8 +2,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionUserApp from '../../../store/actions/index';
 
-import { merge } from 'lodash';
-
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { customTheme } from '../../../theme';
@@ -14,8 +12,10 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 
-import useAppNumberGenerator from '../../../hooks/appNumber-generator';
+// import useAppNumberGenerator from '../../../hooks/appNumber-generator';
 import classModule from './Confirm.module.css';
+
+import useTraceUpdate from '../../../hooks/trace-update';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,9 +66,11 @@ const useStyles = makeStyles((theme) => ({
 
 const FormConfirm = (props) => {
   console.log('<Confirm /> RENDER');
+  console.log('<Confirm /> match', props.match);
+  useTraceUpdate(props);
+
   const classes = useStyles();
-  const { pathNext, pathPrev } = props;
-  const appNumber = useAppNumberGenerator();
+  const { pathNext, pathPrev, history } = props;
 
   const dispatch = useDispatch();
   const tokenREDUX = useSelector((state) => state.auth.token);
@@ -81,22 +83,21 @@ const FormConfirm = (props) => {
     dispatch(actionUserApp.submitApplication(token, personalData, incomeData));
   const onClearApplicationData = () => dispatch(actionUserApp.clearApplicationData());
 
-  console.log('token', tokenREDUX);
-
   const nextStep = () => {
-    props.history.push({ pathname: pathNext });
+    console.log('<Confirm /> next step');
+    history.push({ pathname: pathNext });
   };
 
   const prevStep = () => {
-    props.history.push({ pathname: pathPrev });
+    history.push({ pathname: pathPrev });
   };
-
-  console.log('personalDataREDUX', personalDataREDUX);
 
   const appDate = new Date();
   const appDateFormatted = `${
     appDate.getMonth() + 1
   }/${appDate.getDate()}/${appDate.getFullYear()}`;
+
+  const appNumber = Math.round(Math.random() * 500000);
 
   const applicationData = {
     userId: userIdREDUX,

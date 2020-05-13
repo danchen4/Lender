@@ -40,7 +40,9 @@ const MyDrawer = (props) => {
           <HomeIcon color="secondary" />
         </ListItemIcon>
         <ListItemText>
-          <Link className={classes.link}>Home</Link>
+          <Link to="/home" className={classes.link}>
+            Home
+          </Link>
         </ListItemText>
       </ListItem>
       <ListItem className={classes.listItem}>
@@ -48,7 +50,7 @@ const MyDrawer = (props) => {
           <DashboardIcon color="secondary" />
         </ListItemIcon>
         <ListItemText>
-          <Link to="/accountdashboard" className={classes.link}>
+          <Link to="/signup" className={classes.link}>
             Apply Now
           </Link>
         </ListItemText>
@@ -63,7 +65,9 @@ const MyDrawer = (props) => {
             <HomeIcon color="secondary" />
           </ListItemIcon>
           <ListItemText>
-            <Link className={classes.link}>Home</Link>
+            <Link to="/home" className={classes.link}>
+              Home
+            </Link>
           </ListItemText>
         </ListItem>
         <ListItem className={classes.listItem}>

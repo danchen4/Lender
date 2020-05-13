@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 export const authStart = () => {
   return {
@@ -39,7 +40,7 @@ export const checkAuthTimeout = (expirationTime) => {
   };
 };
 
-export const loginAccount = (formikValues, formikActions, isSignUp) => {
+export const loginAccount = (formikValues, formikActions, isSignUp, redirect, history) => {
   return (dispatch) => {
     const authData = {
       email: formikValues.email,
@@ -59,28 +60,31 @@ export const loginAccount = (formikValues, formikActions, isSignUp) => {
     axios
       .post(url, authData)
       .then((response) => {
-        console.log('login/signup', response.data);
+        console.log('action - loginAccount(): RESPONSE', response.data);
         const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
         localStorage.setItem('token', response.data.idToken);
         localStorage.setItem('expirationDate', expirationDate);
         localStorage.setItem('userId', response.data.localId);
         dispatch(authSuccess(response.data.idToken, response.data.localId));
         dispatch(checkAuthTimeout(response.data.expiresIn));
+        history.push(redirect); //set location after successful login
       })
       .catch((err) => {
-        console.log(err.response);
-        // if (err.response.data.error.message === 'EMAIL_EXISTS') {
-        //   formikActions.setErrors({ email: 'Email already exists' });
-        //   dispatch(authFail(err.response.data.error));
-        // }
-        // if (err.response.data.error.message === 'EMAIL_NOT_FOUND') {
-        //   formikActions.setErrors({ email: 'Email not found' });
-        //   dispatch(authFail(err.response.data.error));
-        // }
-        // if (err.response.data.error.message === 'INVALID_PASSWORD') {
-        //   formikActions.setErrors({ password: 'Invalid password' });
-        //   dispatch(authFail(err.response.data.error));
-        // }
+        console.log(err);
+        if (typeof err.response !== 'undefined') {
+          if (err.response.data.error.message === 'EMAIL_EXISTS') {
+            formikActions.setErrors({ email: 'Email already exists' });
+            dispatch(authFail(err.response.data.error));
+          }
+          if (err.response.data.error.message === 'EMAIL_NOT_FOUND') {
+            formikActions.setErrors({ email: 'Email not found' });
+            dispatch(authFail(err.response.data.error));
+          }
+          if (err.response.data.error.message === 'INVALID_PASSWORD') {
+            formikActions.setErrors({ password: 'Invalid password' });
+            dispatch(authFail(err.response.data.error));
+          }
+        }
       });
   };
 };
@@ -98,6 +102,7 @@ export const checkLoginState = () => {
 
     if (!token) {
       dispatch(logoutAccount());
+      console.log('action - checkLoginState(): dispatch(logoutAccount)');
     } else {
       const expirationDate = new Date(localStorage.getItem('expirationDate'));
       if (expirationDate > new Date()) {
@@ -106,6 +111,7 @@ export const checkLoginState = () => {
         dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
       } else {
         dispatch(logoutAccount());
+        console.log('action - checkLoginState(): Expiration - dispatch(logoutAccount)');
       }
     }
   };
@@ -128,7 +134,7 @@ export const fetchUser = (token) => {
         { idToken: token }
       )
       .then((res) => {
-        console.log(res);
+        console.log('action - fetchUser(): response', res);
       });
   };
 };

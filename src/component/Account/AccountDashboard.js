@@ -69,7 +69,7 @@ const AccountDashboard = (props) => {
   const userIdREDUX = useSelector((state) => state.auth.userId);
   const applicationsREDUX = useSelector((state) => state.userApps.applications);
 
-  console.log('applicationsREDUX', applicationsREDUX);
+  // console.log('<AccountDashboard /> applicationsREDUX', applicationsREDUX);
 
   useEffect(() => {
     dispatch(actionUserApp.fetchApplication(tokenREDUX, userIdREDUX));

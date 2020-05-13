@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import * as actionAuth from '../../../store/actions/index';
 import { Link } from 'react-router-dom';
 
@@ -18,6 +17,7 @@ import MyPasswordTextField from '../../UI/FormikMUI/fkmui-textfield-password/fkm
 
 import classModule from './Login.module.css';
 import withNetworkErrorHandler from '../../../hoc/withNetworkErrorHandler';
+import useTraceUpdate from '../../../hooks/trace-update';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,44 +74,30 @@ const initialValues = {
 };
 
 const SignIn = (props) => {
-  console.log('<SignIn /> RENDER');
+  console.log('<Login /> RENDER');
+  console.log('<Login /> match', props.match);
+  useTraceUpdate(props);
+
+  // useTraceUpdate(props);
   const classes = useStyles();
   const { pathNext } = props;
 
   const dispatch = useDispatch();
-  const tokenREDUX = useSelector((state) => state.auth.token);
   const loadingREDUX = useSelector((state) => state.auth.loading);
-  const authRedirectPathREDUX = useSelector((state) => state.auth.authRedirectPath);
-  const onLogin = (values, actions, isSignUp) =>
-    dispatch(actionAuth.loginAccount(values, actions, isSignUp));
-  const onSetAuthRedirectPath = (path) => dispatch(actionAuth.setAuthRedirectPath(path));
+  const onLogin = (values, actions, isSignUp, redirect, history) =>
+    dispatch(actionAuth.loginAccount(values, actions, isSignUp, redirect, history));
 
-  // useEffect(() => {
-  //   dispatch(actionAuth.setAuthRedirectPath('/accountdashboard'));
-  // }, []);
-
-  let authRedirect = null;
-  if (tokenREDUX) {
-    authRedirect = <Redirect to={authRedirectPathREDUX} />;
-  }
-
-  const nextStep = () => {
-    console.log('nextStep');
-    props.history.push({ pathname: '/accountdashboard' });
-  };
-
-  const submitHandler = (values, actions) => {
+  const submitHandler = async (values, actions) => {
     actions.setSubmitting(true);
-    onLogin(values, actions, false);
-    // onSetAuthRedirectPath('/accountdashboard');
+    //nextStep is executed through onLogin action creator
+    await onLogin(values, actions, false, pathNext, props.history);
     actions.setSubmitting(false);
     actions.resetForm();
-    nextStep();
   };
 
   return (
     <div className={classes.root}>
-      {authRedirect}
+      {/* {authRedirect} */}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -159,9 +145,9 @@ const SignIn = (props) => {
                   >
                     Login
                   </Button>
-                  {/* {loadingREDUX && (
+                  {loadingREDUX && (
                     <CircularProgress size={24} className={classes.buttonProgress} />
-                  )} */}
+                  )}
                 </div>
 
                 <div className={`${classes.spacer} ${classModule.AccountSwitch}`}>

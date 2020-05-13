@@ -31,7 +31,7 @@ export const submitApplication = (token, applicationData) => {
         applicationData
       )
       .then((res) => {
-        console.log(res);
+        console.log('actions - submitApplication(): response', res);
         dispatch(submitSuccess(res.data, applicationData));
       })
       .catch((err) => {
@@ -67,7 +67,7 @@ export const fetchApplication = (token, userId) => {
     axios
       .get('https://loan-application-formik.firebaseio.com/applications.json' + queryParam)
       .then((res) => {
-        console.log(res.data);
+        console.log('actions - fetchApplication(): response.data', res.data);
         let fetchedApplications = [];
         for (let key in res.data) {
           fetchedApplications.push({

@@ -5,11 +5,10 @@ import { Redirect } from 'react-router-dom';
 
 const Logout = (props) => {
   const dispatch = useDispatch();
-  const onSetLogoutAccount = () => dispatch(actions.logoutAccount());
 
   useEffect(() => {
-    onSetLogoutAccount();
-  }, []);
+    dispatch(actions.logoutAccount());
+  }, [dispatch]);
 
   return <Redirect to="/login" />;
 };

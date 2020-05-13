@@ -12,6 +12,9 @@ import * as Yup from 'yup';
 import MyTextField from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import MyMaskedTextField from '../../UI/FormikMUI/fkmui-textfield-masked/fkmui-textfield-masked';
 
+import useTraceUpdate from '../../../hooks/trace-update';
+// import { isArrayEqual } from '../../../utility/deepCompareArray';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: '30px',
@@ -52,10 +55,17 @@ const validationSchema = Yup.object({
 });
 
 const FormUserName = (props) => {
+  console.log('<FormPersonal /> RENDER');
+  console.log('<FormPersonal /> match', props.match);
+  useTraceUpdate(props);
+
+  console.log(Math.round(Math.random() * 500000));
+
   const classes = useStyles();
   const { pathNext, history } = props;
 
   const dispatch = useDispatch();
+
   const personalDataREDUX = useSelector((state) => state.application.personalData);
   const onSetPersonalData = (userPersonalData) =>
     dispatch(actionApp.setPersonalData(userPersonalData));
@@ -66,22 +76,17 @@ const FormUserName = (props) => {
     phone: personalDataREDUX.phone.value || '',
   };
 
-  console.log('<FormPersonal /> RENDER', personalDataREDUX);
-  console.log('<FormPersonal /> history', history);
-
   const nextStep = () => {
-    props.history.push({ pathname: pathNext });
+    console.log('<FormPersonal /> nextStep');
+    history.push({ pathname: pathNext });
   };
 
-  const submitHandler = async (values, actions) => {
+  const submitHandler = (values, actions) => {
     actions.setSubmitting(true);
-    await setTimeout(() => {
-      console.log('data onSubmit', values);
-      onSetPersonalData(values);
-      actions.setSubmitting(false);
-      actions.resetForm();
-      nextStep();
-    }, 1000);
+    onSetPersonalData(values);
+    actions.setSubmitting(false);
+    actions.resetForm();
+    nextStep();
   };
 
   return (
@@ -149,5 +154,9 @@ const FormUserName = (props) => {
     </div>
   );
 };
+
+// function compareMatch(prevProps, nextProps) {
+//   return isArrayEqual(prevProps.match, nextProps.match);
+// }
 
 export default FormUserName;

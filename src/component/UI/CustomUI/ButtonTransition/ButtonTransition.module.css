@@ -1,0 +1,13 @@
+.Button {
+  animation: showButton 1s ease-in-out;
+}
+
+@keyframes showButton {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

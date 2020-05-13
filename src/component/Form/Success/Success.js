@@ -31,12 +31,12 @@ const useStyles = makeStyles((theme) => ({
 
 const FormPersonal = (props) => {
   const classes = useStyles();
-  const { pathNext } = props;
+  const { pathNext, history } = props;
 
   console.log('<FormSuccess /> RENDER');
 
   const nextStep = () => {
-    props.history.push({ pathname: pathNext });
+    history.push({ pathname: pathNext });
   };
 
   return (

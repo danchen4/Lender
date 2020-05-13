@@ -16,6 +16,8 @@ import AddIncomeSourceForm from './Forms/AddIncomeSourceForm';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import classModule from './Income.module.css';
 
+import useTraceUpdate from '../../../hooks/trace-update';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: '30px',
@@ -80,8 +82,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FormEmployer = React.memo((props) => {
+  console.log('<FormIncome /> RENDER');
+  console.log('<FormIncome />  match', props.match);
+  useTraceUpdate(props);
+
   const classes = useStyles();
-  const { pathNext, pathPrev } = props;
+  const { pathNext, pathPrev, history } = props;
   const [showForm, setShowForm] = useState(false);
 
   const dispatch = useDispatch();
@@ -94,14 +100,13 @@ const FormEmployer = React.memo((props) => {
   const onEditIncomeArray = (index, editable) =>
     dispatch(actionApp.editIncomeArray(index, editable));
 
-  console.log('<FormEmployer /> RENDER', incomeDataREDUX);
-
   const nextStep = () => {
-    props.history.push({ pathname: pathNext });
+    console.log('<FormIncome /> next step');
+    history.push({ pathname: pathNext });
   };
 
   const prevStep = () => {
-    props.history.push({ pathname: pathPrev });
+    history.push({ pathname: pathPrev });
   };
 
   const toggleFormHandler = () => {

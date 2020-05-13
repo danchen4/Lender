@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionAuth from '../../../store/actions/index';
 import { Link } from 'react-router-dom';
@@ -82,9 +82,8 @@ const initialValues = {
 const CreateAccount = (props) => {
   console.log('<CreatAccount /> RENDER');
   const classes = useStyles();
-  // const authContext = useContext(AuthContext);
+  const { history, pathNext } = props;
 
-  // const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   const loadingREDUX = useSelector((state) => state.auth.loading);
@@ -93,7 +92,7 @@ const CreateAccount = (props) => {
   // const onSetRedirectPath = (path) => dispatch(actionAuth.setAuthRedirectPath(path));
 
   const nextStep = () => {
-    props.history.push({ pathname: '/personalinfo' });
+    history.push({ pathname: pathNext });
   };
 
   const submitHandler = async (values, actions, isSignUp) => {
@@ -117,7 +116,7 @@ const CreateAccount = (props) => {
           submitHandler(actions, values, true);
         }}
       >
-        {({ values, errors, isSubmitting, dirty, isValid }) => (
+        {({ values, errors, dirty, isValid }) => (
           <Box component="div" className={classes.box}>
             <Paper className={classes.paper} elevation={2}>
               <Typography variant="h4" color="secondary">
