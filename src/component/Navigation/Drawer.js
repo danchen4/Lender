@@ -22,13 +22,23 @@ const useStyles = makeStyles((theme) => ({
   listItem: {
     padding: '16px',
   },
+  listItemText: {
+    fontSize: '1.4rem',
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '1.6rem',
+    },
+  },
+  icon: {
+    height: '2rem',
+    width: '2rem',
+  },
   link: {
     textDecoration: 'none',
     color: '#999ba0',
   },
 }));
 
-const MyDrawer = (props) => {
+export const MyDrawer = ({ showDrawer, closeDrawer }) => {
   const classes = useStyles();
 
   const isAuthenticatedREDUX = useSelector((state) => state.auth.token);
@@ -37,61 +47,39 @@ const MyDrawer = (props) => {
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
         <ListItemIcon>
-          <HomeIcon color="secondary" />
+          <HomeIcon classes={{ root: classes.icon }} color="secondary" />
         </ListItemIcon>
-        <ListItemText>
-          <Link to="/home" className={classes.link}>
+        <ListItemText classes={{ primary: classes.listItemText }}>
+          <Link to="/" className={classes.link} onClick={closeDrawer}>
             Home
           </Link>
         </ListItemText>
       </ListItem>
       <ListItem className={classes.listItem}>
         <ListItemIcon>
-          <DashboardIcon color="secondary" />
+          <DashboardIcon classes={{ root: classes.icon }} color="secondary" />
         </ListItemIcon>
-        <ListItemText>
-          <Link to="/signup" className={classes.link}>
-            Apply Now
+        <ListItemText classes={{ primary: classes.listItemText }}>
+          <Link
+            to={isAuthenticatedREDUX ? '/accountdashboard' : '/signup'}
+            className={classes.link}
+            onClick={closeDrawer}
+          >
+            {isAuthenticatedREDUX ? 'Dashboard' : 'Apply Now'}
           </Link>
         </ListItemText>
       </ListItem>
     </List>
   );
-  if (isAuthenticatedREDUX) {
-    list = (
-      <List className={classes.list}>
-        <ListItem className={classes.listItem}>
-          <ListItemIcon>
-            <HomeIcon color="secondary" />
-          </ListItemIcon>
-          <ListItemText>
-            <Link to="/home" className={classes.link}>
-              Home
-            </Link>
-          </ListItemText>
-        </ListItem>
-        <ListItem className={classes.listItem}>
-          <ListItemIcon>
-            <DashboardIcon color="secondary" />
-          </ListItemIcon>
-          <ListItemText>
-            <Link to="/accountdashboard" className={classes.link}>
-              Dashboard
-            </Link>
-          </ListItemText>
-        </ListItem>
-      </List>
-    );
-  }
 
   return (
     <React.Fragment>
       <Drawer
         className={classes.root}
         anchor="left"
-        open={props.showDrawer}
+        open={showDrawer}
         transitionDuration={300}
-        onClose={props.closeDrawer}
+        onClose={closeDrawer}
       >
         {list}
       </Drawer>

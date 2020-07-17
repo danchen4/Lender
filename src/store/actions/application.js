@@ -42,3 +42,9 @@ export const clearApplicationData = () => {
     type: actionTypes.CLEAR_APPLICATION_DATA,
   };
 };
+
+export const checkApplicationData = () => (dispatch) => {
+  const userPersonalData = sessionStorage.getItem('userPersonalData');
+
+  if (userPersonalData) dispatch(setPersonalData(JSON.parse(userPersonalData)));
+};

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../theme';
+import { customTheme } from '../../../theme/theme';
 
 const useStyles = makeStyles((theme) => ({
   root: {

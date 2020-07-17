@@ -1,7 +1,20 @@
-body {
+*,
+*::after,
+*::before {
   margin: 0;
   padding: 0;
+  box-sizing: inherit; /* better practice if you want to use different box-sizing*/
+}
+
+html {
+  /* // this defines what one 1rem is; */
+  /* easier for REM calculation. Browser default is 16px;  Set as % to browser default */
+  font-size: 62.5%;
+}
+
+body {
   font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

@@ -5,7 +5,6 @@ const initialState = {
   userId: null,
   error: null,
   loading: false,
-  authRedirectPath: '',
   userData: { email: '', passwordHash: '' },
 };
 
@@ -44,13 +43,6 @@ const authLogout = (state, action) => {
   };
 };
 
-const setAuthRedirect = (state, action) => {
-  return {
-    ...state,
-    authRedirectPath: action.path,
-  };
-};
-
 const fetchUserSuccess = (state, action) => {
   const userDataCopy = {
     ...state.userData,
@@ -76,8 +68,6 @@ export default (state = initialState, action) => {
       return authSuccess(state, action);
     case actionTypes.AUTH_LOGOUT:
       return authLogout(state, action);
-    case actionTypes.SET_AUTH_REDIRECT:
-      return setAuthRedirect(state, action);
     default:
       return state;
   }

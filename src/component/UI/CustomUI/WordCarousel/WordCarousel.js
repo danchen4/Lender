@@ -1,27 +1,39 @@
 import React, { useState, useEffect } from 'react';
+import { AnimateOnChange, HideUntilLoaded } from 'react-animation';
 
-import classModule from './WordCarousel.module.css';
-
-const Word = ({ word }) => <div className={classModule.Word}>{word}</div>;
+import './WordCarousel.css';
 
 const WordCarousel = ({ wordArray }) => {
-  console.log(wordArray);
-  const [word, setWord] = useState('');
-  const [showWord, setShowWord] = useState(false);
-
-  let delay1 = 1000;
+  console.log('RENDER');
+  const [current, setCurrent] = useState(0);
+  let delay = 2000;
 
   useEffect(() => {
-    setWord(wordArray.shift());
-    let id1 = setTimeout(() => {
-      setShowWord(true);
-    }, delay1);
+    const id = setTimeout(() => {
+      if (current === wordArray.length - 1) {
+        setCurrent(0);
+      } else {
+        setCurrent((prevState) => prevState + 1);
+      }
+    }, delay);
     return () => {
-      clearTimeout(id1);
+      clearTimeout(id);
     };
-  }, [wordArray]);
+  });
 
-  return <React.Fragment>{showWord ? <Word word={word} /> : null}</React.Fragment>;
+  return (
+    <React.Fragment>
+      <div className="AnimatedWordContainer">
+        <AnimateOnChange
+          animationIn="custom-animation-in 800ms ease-out"
+          animationOut="custom-animation-out 800ms ease-out"
+          className="AnimatedWord"
+        >
+          {wordArray[current]}
+        </AnimateOnChange>
+      </div>
+    </React.Fragment>
+  );
 };
 
 export default WordCarousel;

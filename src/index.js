@@ -13,7 +13,7 @@ import authReducer from './store/reducers/auth';
 import userApplicationsReducer from './store/reducers/userApplications';
 
 import { ThemeProvider } from '@material-ui/core/styles';
-import { customTheme } from './theme';
+import { customTheme } from './theme/theme';
 
 const rootReducer = combineReducers({
   application: applicationReducer,

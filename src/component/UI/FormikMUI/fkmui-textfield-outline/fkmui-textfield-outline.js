@@ -1,45 +1,78 @@
-import React from 'react'
-import PropTypes from 'prop-types';
-import classModule from './fkmui-textfield-outline.module.css'
-
-
-import {TextField} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
+// Formik
 import { useField } from 'formik';
+// CSS
+import classes from './fkmui-textfield-outline.module.css';
+// Material UI
+import { TextField } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles({
-    textField: {
-      width: customStyle=> customStyle.width || null,
-    }
-  }
-);
+const useStyles = makeStyles((theme) => ({
+  textField: {
+    width: (customStyle) => (customStyle.width || 100) + '%',
+  },
+  label: {
+    fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
+    paddingRight: '1rem',
+    textAlign: 'left',
+    backgroundColor: 'white',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
+    },
+  },
+  input: {
+    fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem', // in order for input field to match font-size on label, must also adapt height to font-size
+    [theme.breakpoints.down('sm')]: {
+      fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
+    },
+  },
+  helperText: {
+    fontSize: (customStyle) => (customStyle.errorFontSize || 1.4) + 'rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
+    },
+  },
+}));
 
-const MyTextField =({ autoFocus, label, type, required, ...props }) => {
-  const { customStyle } = props
-  const classes = useStyles(customStyle);
+export const MyTextField = ({
+  name,
+  label,
+  required,
+  secondary,
+  autoFocus = false,
+  customStyle,
+}) => {
+  const classesMUI = useStyles(customStyle);
 
-  const [fieldprops, meta] = useField(props);
+  const [fieldprops, meta] = useField(name);
   const errorText = meta.error && meta.touched && meta.error;
-
 
   return (
     <TextField
       {...fieldprops}
-      type={type}
+      className={
+        meta.error && meta.touched
+          ? `${classesMUI.textField} ${classes.Shake}`
+          : classesMUI.textField
+      }
+      InputProps={{
+        classes: {
+          input: classesMUI.input,
+        },
+      }}
+      InputLabelProps={{
+        className: classesMUI.label,
+      }}
+      FormHelperTextProps={{
+        className: classesMUI.helperText,
+      }}
+      variant="outlined"
+      color={secondary && 'secondary'}
+      label={label}
       required={required}
-      className={meta.error && meta.touched ? `${classes.textField} ${classModule.Shake}` : classes.textField}
       helperText={errorText}
       error={!!errorText}
-      variant="outlined"
-      label={label}
       autoFocus={autoFocus}
     />
   );
 };
-
-MyTextField.propTypes = {
-  label: PropTypes.string.isRequired,
-  required: PropTypes.bool,
-}
-
-export default MyTextField;

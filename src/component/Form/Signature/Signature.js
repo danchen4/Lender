@@ -1,22 +1,19 @@
 import React from 'react';
+// Redux
 import { useSelector } from 'react-redux';
-
+// MaterialUI
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../theme';
-
+import { customTheme } from '../../../theme/theme';
+// FormikYup
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-
-import MyTextField from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
+// Components
+import { MyTextField } from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import MyCheckbox from '../../UI/FormikMUI/fkmui-checkbox/fkmui-checkbox';
-
-import useTraceUpdate from '../../../hooks/trace-update';
+import { Spacer } from '../../UI/CustomUI/Spacer/Spacer';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: '30px',
-  },
   box: {
     padding: '0.5rem',
   },
@@ -25,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
     borderRadius: '6px',
     padding: theme.spacing(3),
-  },
-  spacer: {
-    margin: '24px 0',
   },
   button: {
     margin: '1rem',
@@ -41,21 +35,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormUserName = (props) => {
+const initialValues = {
+  agreeTerms: false,
+  agreeSignature: false,
+  signature: '',
+};
+
+const TERMS_CHECKBOX =
+  'I hereby promise, represent and warrant that I am not currently a debtor under any proceeding in bankruptcy and that I have no intention to file a petition for relief under any chapter of the United States Bankruptcy Code.';
+
+const FormUserName = ({ pathNext, pathPrev, history }) => {
   console.log('<Signature /> RENDER');
-  console.log('<Signature />   match', props.match);
-  useTraceUpdate(props);
-
   const classes = useStyles();
-  const { pathNext, pathPrev, history } = props;
-
   const personalDataREDUX = useSelector((state) => state.application.personalData);
-
-  const initialValues = {
-    agreeTerms: false,
-    agreeSignature: false,
-    signature: '',
-  };
 
   const validationSchema = Yup.object({
     agreeTerms: Yup.boolean().oneOf([true], 'Must accept Terms and Conditions').required(),
@@ -95,39 +87,40 @@ const FormUserName = (props) => {
         {({ values, errors, isSubmitting, dirty, isValid }) => (
           <Box component="div" className={classes.box}>
             <Paper className={classes.paper} elevation={2}>
-              <Typography variant="h4" color="secondary">
-                Signature
-              </Typography>
+              <Spacer margin={3}>
+                <Typography variant="h2" color="secondary">
+                  Signature
+                </Typography>
+              </Spacer>
               <Form>
-                <div className={classes.spacer}>
-                  <MyCheckbox
-                    name="agreeTerms"
-                    label="I agree to the Terms and Conditions"
-                    required
-                    customStyle={{ width: '100%' }}
-                  />
-                </div>
-
-                <div className={classes.spacer}>
+                <Spacer>
                   <div className={classes.spacer}>
                     <MyCheckbox
-                      name="agreeSignature"
-                      label="I agree to the Electronic Signature"
+                      name="agreeTerms"
+                      label="I agree to the Terms and Conditions"
                       required
-                      customStyle={{ width: '100%' }}
+                      customStyle={{ width: 100 }}
                     />
                   </div>
-                </div>
-
-                <div className={classes.spacer}>
-                  <MyTextField
-                    name="signature"
-                    label="Electronic Signature"
+                </Spacer>
+                <Spacer>
+                  <MyCheckbox
+                    name="agreeSignature"
+                    label="I agree to the Electronic Signature"
                     required
-                    customStyle={{ width: '100%' }}
+                    customStyle={{ width: 100 }}
                   />
-                </div>
-
+                </Spacer>
+                <Spacer>
+                  <div className={classes.spacer}>
+                    <MyTextField
+                      name="signature"
+                      label="Electronic Signature"
+                      required
+                      customStyle={{ width: 100 }}
+                    />
+                  </div>
+                </Spacer>
                 <Button
                   variant="contained"
                   color="secondary"
@@ -137,7 +130,6 @@ const FormUserName = (props) => {
                 >
                   Back
                 </Button>
-
                 <Button
                   variant="contained"
                   color="secondary"

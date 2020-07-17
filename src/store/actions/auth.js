@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
-import { withRouter } from 'react-router-dom';
 
 export const authStart = () => {
   return {
@@ -89,13 +88,6 @@ export const loginAccount = (formikValues, formikActions, isSignUp, redirect, hi
   };
 };
 
-export const setAuthRedirectPath = (path) => {
-  return {
-    type: actionTypes.SET_AUTH_REDIRECT,
-    path: path,
-  };
-};
-
 export const checkLoginState = () => {
   return (dispatch) => {
     const token = localStorage.getItem('token');
@@ -119,9 +111,15 @@ export const checkLoginState = () => {
 
 export const fetchUserSuccess = (email, passwordHash) => {
   return {
-    type: actionTypes.RETRIEVE_ACCOUNT_SUCCESS,
+    type: actionTypes.FETCH_USER_SUCCESS,
     email: email,
     passwordHash: passwordHash,
+  };
+};
+
+export const fetchUserFail = () => {
+  return {
+    type: actionTypes.FETCH_USER_FAIL,
   };
 };
 
@@ -135,6 +133,7 @@ export const fetchUser = (token) => {
       )
       .then((res) => {
         console.log('action - fetchUser(): response', res);
-      });
+      })
+      .catch((err) => {});
   };
 };

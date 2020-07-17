@@ -17,7 +17,7 @@ const WeeklyPayFrequency = () => {
         label="Day of Week"
         options={weeklyPayDateSelect}
         required
-        customStyle={{ width: '100%' }}
+        customStyle={{ width: 100 }}
       />
     </React.Fragment>
   );

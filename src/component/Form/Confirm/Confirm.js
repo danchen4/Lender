@@ -1,26 +1,21 @@
 import React from 'react';
+// Redux
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionUserApp from '../../../store/actions/index';
-
+// Material UI
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../theme';
-
+import { customTheme } from '../../../theme/theme';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { purple } from '@material-ui/core/colors';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
-
-// import useAppNumberGenerator from '../../../hooks/appNumber-generator';
+// CSS
 import classModule from './Confirm.module.css';
-
-import useTraceUpdate from '../../../hooks/trace-update';
+import { Spacer } from '../../UI/CustomUI/Spacer/Spacer';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: '30px',
-  },
   header1: {
     padding: '1rem 0',
   },
@@ -47,9 +42,6 @@ const useStyles = makeStyles((theme) => ({
       paddingBottom: 8,
     },
   },
-  spacer: {
-    margin: '24px 0',
-  },
   button: {
     margin: '1rem',
     backgroundColor: customTheme.palette.primary.dark,
@@ -64,13 +56,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormConfirm = (props) => {
+const FormConfirm = ({ pathNext, pathPrev, history }) => {
   console.log('<Confirm /> RENDER');
-  console.log('<Confirm /> match', props.match);
-  useTraceUpdate(props);
-
   const classes = useStyles();
-  const { pathNext, pathPrev, history } = props;
 
   const dispatch = useDispatch();
   const tokenREDUX = useSelector((state) => state.auth.token);
@@ -128,10 +116,11 @@ const FormConfirm = (props) => {
     <div className={classes.root}>
       <Box component="div" className={classes.box}>
         <Paper className={classes.paper} elevation={2}>
-          <Typography variant="h5" color="secondary" className={classes.header1}>
-            Confirm Your Information
-          </Typography>
-
+          <Spacer margin={3}>
+            <Typography variant="h2" color="secondary">
+              Confirm Your Information
+            </Typography>
+          </Spacer>
           <Card variant="outlined" className={classes.card}>
             <CardContent className={classes.cardContent}>
               <div className={classModule.CardHeader}>

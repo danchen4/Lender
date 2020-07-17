@@ -4,7 +4,7 @@ import * as actionUserApp from '../../store/actions/index';
 
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../theme';
+import { customTheme } from '../../theme/theme';
 
 import { purple } from '@material-ui/core/colors';
 import Card from '@material-ui/core/Card';
@@ -68,13 +68,16 @@ const AccountDashboard = (props) => {
   const tokenREDUX = useSelector((state) => state.auth.token);
   const userIdREDUX = useSelector((state) => state.auth.userId);
   const applicationsREDUX = useSelector((state) => state.userApps.applications);
+  const errorREDUX = useSelector((state) => state.userApps.error);
 
   // console.log('<AccountDashboard /> applicationsREDUX', applicationsREDUX);
 
   useEffect(() => {
-    dispatch(actionUserApp.fetchApplication(tokenREDUX, userIdREDUX));
-    dispatch(actionUserApp.fetchUser(tokenREDUX));
-  }, [dispatch, tokenREDUX, userIdREDUX]);
+    if (!errorREDUX) {
+      dispatch(actionUserApp.fetchApplication(tokenREDUX, userIdREDUX));
+      dispatch(actionUserApp.fetchUser(tokenREDUX));
+    }
+  }, [dispatch, tokenREDUX, userIdREDUX, errorREDUX]);
 
   // const userValueArray = [];
   // for (let key in personalDataREDUX) {

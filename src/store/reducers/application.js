@@ -5,7 +5,6 @@ const initialState = {
   personalData: {
     firstName: { label: 'First Name', value: '' },
     lastName: { label: 'Last Name', value: '' },
-    email: { label: 'Email Address', value: '' },
     address1: { label: 'Street Address 1', value: '' },
     address2: { label: 'Street Address 2', value: '' },
     city: { label: 'City', value: '' },
@@ -30,29 +29,23 @@ const setPersonalData = (state, action) => {
 };
 
 const addIncomeArray = (state, action) => {
-  const incomeDataArrayCopy = cloneDeep(state.incomeData);
-  incomeDataArrayCopy.push(action.incomeDataObject);
   return {
     ...state,
-    incomeData: incomeDataArrayCopy,
+    incomeData: state.incomeData.concat(action.incomeDataObject),
   };
 };
 
 const deleteIncomeArray = (state, action) => {
-  const incomeDataArrayCopy = cloneDeep(state.incomeData);
-  incomeDataArrayCopy.splice(action.index, 1);
   return {
     ...state,
-    incomeData: incomeDataArrayCopy,
+    incomeData: state.incomeData.splice(action.index, 1),
   };
 };
 
 const udpateIncomeArray = (state, action) => {
-  const incomeDataArrayCopy = cloneDeep(state.incomeData);
-  incomeDataArrayCopy.splice(action.index, 1, action.incomeDataObject);
   return {
     ...state,
-    incomeData: incomeDataArrayCopy,
+    incomeData: state.incomeData.splice(action.index, 1, action.incomeDataObject),
   };
 };
 

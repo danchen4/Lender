@@ -1,16 +1,17 @@
 import React from 'react';
+// Redux
 import { useSelector } from 'react-redux';
+// Router
 import { Link, withRouter } from 'react-router-dom';
-
+// Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import logo from './lender-logo.png';
+import logo from '../../images/lender-logo.png';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     zIndex: '99',
@@ -25,30 +26,55 @@ const useStyles = makeStyles({
     textDecoration: 'none',
     color: 'white',
     fontWeight: '500',
-    fontSize: '1.25rem',
+    fontSize: '1.4rem',
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '1.6rem',
+    },
   },
-  imgContainer: {
+  button: {
     flexGrow: 1,
     height: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    background: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
   },
-});
+  icon: {
+    height: '2rem',
+    width: '2rem',
+  },
+  logo: {
+    [theme.breakpoints.down('sm')]: {
+      width: '160px',
+    },
+  },
+}));
 
-const ButtonAppBar = (props) => {
+export const ButtonAppBar = (props) => {
   const classes = useStyles();
   const tokenREDUX = useSelector((state) => state.auth.token);
+
+  const goHome = () => {
+    props.history.push({ pathname: '/' });
+  };
 
   return (
     <div className={classes.root}>
       <AppBar position="static" color="primary">
         <Toolbar className={classes.toolBar}>
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={props.toggleDrawer}>
-            <MenuIcon />
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            size="medium"
+            onClick={props.toggleDrawer}
+          >
+            <MenuIcon classes={{ root: classes.icon }} />
           </IconButton>
-          <div className={classes.imgContainer}>
-            <img src={logo} alt="logo" />
+          <div className={classes.button} onClick={goHome}>
+            <img className={classes.logo} src={logo} alt="logo" />
           </div>
           {tokenREDUX ? (
             <Link className={classes.link} to="/logout">

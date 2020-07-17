@@ -1,0 +1,31 @@
+.AnimatedWordContainer {
+  height: 20px;
+  margin: 1rem 0 3rem 0;
+}
+
+.AnimatedWord {
+  color: black;
+  font-size: 18px;
+}
+
+@keyframes custom-animation-in {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes custom-animation-out {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}

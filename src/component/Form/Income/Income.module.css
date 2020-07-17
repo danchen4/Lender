@@ -20,7 +20,7 @@
   display: flex;
   flex-flow: column;
   justify-content: center;
-  height: 30px;
+  height: 40px;
   width: 100%;
   background-image: linear-gradient(to right, rgba(183, 185, 232, 1) 60%, rgba(160, 162, 210, 1));
   padding: 0.4rem;
@@ -43,7 +43,7 @@
 
 .CardSectionHeader {
   margin-bottom: 10px;
-  font-size: 14px;
+  font-size: 1.4rem;
   color: #999ba0;
 }
 

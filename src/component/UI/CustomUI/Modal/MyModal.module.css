@@ -1,4 +1,4 @@
-.MyModal {
+.Modal {
   position: fixed;
   z-index: 500;
   background-color: white;
@@ -10,44 +10,25 @@
   left: 15%;
   top: 30%;
   box-sizing: border-box;
-  transition: all 0.3s ease-out;
+  animation: animate-in 300ms ease-out;
 }
 
 @media (min-width: 500px) {
-  .MyModal {
+  .Modal {
     width: 500px;
     left: calc(50% - 250px);
     top: calc(50% - 250px);
   }
 }
 
-.fadeEnter {
-  opacity: 0;
-  /* transform: translateX(-100%); */
-}
+@keyframes animate-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
 
-.fadeEnterActive {
-  opacity: 1;
-  /* transform: translateX(0%); */
-  transition: all 200ms ease-in;
-}
-
-.fadeExit {
-  opacity: 1;
-  /* transform: translateX(0%); */
-}
-
-.fadeExitActive {
-  opacity: 0;
-  /* transform: translateX(100%); */
-  transition: all 200ms ease-out;
-}
-
-.fadeAppear {
-  opacity: 0;
-}
-
-.fadeAppearActive {
-  opacity: 1;
-  transition: all 200ms ease-in;
+  100% {
+    opacity: 1;
+    transform: none;
+  }
 }

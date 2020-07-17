@@ -1,37 +1,62 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useField } from 'formik';
+// CSS
 import classModule from './fkmui-textfield-masked.module.css';
-
+// Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-// import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-
-import { useField, ErrorMessage } from 'formik';
+import { FormHelperText } from '@material-ui/core';
+// TextMask
 import MaskedInput from 'react-text-mask';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   textField: {
-    width: (customStyle) => customStyle.width || null,
+    width: (customStyle) => (customStyle.width || 100) + '%',
+  },
+  label: {
+    fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
+    paddingRight: '1rem',
+    textAlign: 'left',
+    backgroundColor: 'white',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
+    },
+  },
+  input: {
+    fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
+    },
   },
   errorMessage: {
     color: 'rgba(164, 49, 41, 1)',
     margin: '3px 14px 0 14px',
-    fontSize: '0.75rem',
+    fontSize: '1.4rem',
     textAlign: 'left',
-    fontWeight: '400',
+    fontWeight: 'normal',
     lineHeight: '1.66',
     letterSpacing: '0.03333em',
     fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif`,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.2rem',
+    },
   },
-});
+}));
 
-const MyMaskedTextField = ({ label, required, maskInput, delimiter, ...props }) => {
-  const { customStyle } = props;
-  const classes = useStyles(customStyle);
-  const [fieldprops, meta, handler] = useField(props);
-
+const MyMaskedTextField = ({
+  label,
+  required,
+  maskInput,
+  delimiter,
+  secondary,
+  customStyle,
+  name,
+}) => {
+  const classesMUI = useStyles(customStyle);
+  const [fieldprops, meta, handler] = useField(name);
   const errorText = meta.error && meta.touched && meta.error;
 
   const TextMaskCustom = useCallback(
@@ -41,6 +66,9 @@ const MyMaskedTextField = ({ label, required, maskInput, delimiter, ...props }) 
       return (
         <MaskedInput
           {...other}
+          ref={(ref) => {
+            inputRef(ref ? ref.inputElement : null);
+          }}
           mask={maskInput}
           placeholderChar={'\u2000'}
           keepCharPositions={false}
@@ -56,18 +84,20 @@ const MyMaskedTextField = ({ label, required, maskInput, delimiter, ...props }) 
       <FormControl
         className={
           meta.error && meta.touched
-            ? `${classes.textField} ${classModule.Shake}`
-            : classes.textField
+            ? `${classesMUI.textField} ${classModule.Shake}`
+            : classesMUI.textField
         }
         variant="outlined"
         required={required}
       >
-        <InputLabel>{label}</InputLabel>
+        <InputLabel className={classesMUI.label}>{label}</InputLabel>
         <OutlinedInput
           {...fieldprops}
           label={label}
           error={!!errorText}
           inputComponent={TextMaskCustom}
+          inputProps={{ className: classesMUI.input }}
+          color={secondary && 'secondary'}
           onChange={(e) => {
             const delimiterRegExp = new RegExp(delimiter, 'g');
             const val = e.target.value.replace(delimiterRegExp, '');
@@ -75,7 +105,7 @@ const MyMaskedTextField = ({ label, required, maskInput, delimiter, ...props }) 
           }}
         />
       </FormControl>
-      <ErrorMessage>{() => <div className={classes.errorMessage}>{errorText}</div>}</ErrorMessage>
+      <FormHelperText className={classesMUI.errorMessage}>{errorText}</FormHelperText>
     </React.Fragment>
   );
 };

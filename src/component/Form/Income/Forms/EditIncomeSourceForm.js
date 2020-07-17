@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-
+// Formik/Yup
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-
+// Material UI
 import { Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../../theme';
-
+import { customTheme } from '../../../../theme/theme';
+// Components
 import AddEmployerIncomeForm from './AddEmployerIncomeForm';
 import AddOtherIncomeForm from './AddOtherIncomeForm';
-
-import setIncomeDataObject from '../setIncomeDataUtility';
+// Misc.
+import setIncomeDataObject from '../helper/setIncomeDataUtility';
+import { Spacer } from '../../../UI/CustomUI/Spacer/Spacer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,10 +104,8 @@ const validationSchema = Yup.object({
   }),
 });
 
-const EditIncomeSourceForm = (props) => {
+const EditIncomeSourceForm = ({ updateIncomeData, editIncomeData, values, index }) => {
   const classes = useStyles();
-  const { updateIncomeData, editIncomeData, values, index } = props;
-
   const [showForm, setShowForm] = useState(true);
 
   const initialValues = {
@@ -138,8 +137,6 @@ const EditIncomeSourceForm = (props) => {
     actions.setSubmitting(false);
     actions.resetForm();
     hideForm();
-
-    // setTimeout(()=>toggleForm(),100)
   };
 
   let form = '';
@@ -157,7 +154,7 @@ const EditIncomeSourceForm = (props) => {
             {values[index].source.value === 'Employment' && <AddEmployerIncomeForm {...props} />}
             {values[index].source.value === 'Other' && <AddOtherIncomeForm {...props} />}
 
-            <div className={classes.spacer}>
+            <Spacer>
               <Button
                 variant="contained"
                 color="secondary"
@@ -166,7 +163,6 @@ const EditIncomeSourceForm = (props) => {
                 onClick={(event) => {
                   props.setFieldValue('incomeSource', '');
                   editIncomeData(index, false);
-                  // console.log(props.values);
                 }}
               >
                 Cancel
@@ -182,7 +178,7 @@ const EditIncomeSourceForm = (props) => {
               >
                 Save
               </Button>
-            </div>
+            </Spacer>
 
             <pre className={classes.valueDisplay}>{JSON.stringify(props.values, null, 4)}</pre>
             <pre className={classes.valueDisplay}>{JSON.stringify(props.errors, null, 4)}</pre>

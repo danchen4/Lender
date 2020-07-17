@@ -1,26 +1,28 @@
 import React from 'react';
+// Router
+import { Link } from 'react-router-dom';
+// Redux
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionAuth from '../../../store/actions/index';
-import { Link } from 'react-router-dom';
-
+// Formik/Yup
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+// Material UI
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { customTheme } from '../../../theme';
+import { customTheme } from '../../../theme/theme';
 import { purple } from '@material-ui/core/colors';
-
-import MyTextField from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
-import MyPasswordTextField from '../../UI/FormikMUI/fkmui-textfield-password/fkmui-textfield-password';
-
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-
+// Components
+import { MyTextField } from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
+import { MyPasswordTextField } from '../../UI/FormikMUI/fkmui-textfield-password/fkmui-textfield-password';
+//
 import classModule from './CreateAccount.module.css';
+// Misc.
+import withNetworkErrorHandler from '../../../hoc/withNetworkErrorHandler';
+import { Spacer } from '../../UI/CustomUI/Spacer/Spacer';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: '30px',
-  },
   box: {
     padding: '0.5rem',
   },
@@ -29,12 +31,6 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
     borderRadius: '6px',
     padding: theme.spacing(3),
-  },
-  textField: {
-    width: '90%',
-  },
-  spacer: {
-    margin: '24px 0',
   },
   button: {
     margin: '1rem',
@@ -79,30 +75,22 @@ const initialValues = {
   passwordConfirm: '',
 };
 
-const CreateAccount = (props) => {
+const CreateAccount = ({ history, pathNext }) => {
   console.log('<CreatAccount /> RENDER');
   const classes = useStyles();
-  const { history, pathNext } = props;
-
   const dispatch = useDispatch();
-
-  const loadingREDUX = useSelector((state) => state.auth.loading);
-  const onLogin = (values, actions, isSignUp) =>
-    dispatch(actionAuth.loginAccount(values, actions, isSignUp));
-  // const onSetRedirectPath = (path) => dispatch(actionAuth.setAuthRedirectPath(path));
+  const loading = useSelector((state) => state.auth.loading);
 
   const nextStep = () => {
     history.push({ pathname: pathNext });
   };
 
   const submitHandler = async (values, actions, isSignUp) => {
-    // setIsLoading(true);
     actions.setSubmitting(true);
     setTimeout(() => {
-      onLogin(values, actions, isSignUp);
+      dispatch(actionAuth.loginAccount(values, actions, isSignUp));
       actions.setSubmitting(false);
       actions.resetForm();
-      // setIsLoading(false);
       nextStep();
     }, 1500);
   };
@@ -119,48 +107,51 @@ const CreateAccount = (props) => {
         {({ values, errors, dirty, isValid }) => (
           <Box component="div" className={classes.box}>
             <Paper className={classes.paper} elevation={2}>
-              <Typography variant="h4" color="secondary">
-                Create An Account
-              </Typography>
+              <Spacer margin={3}>
+                <Typography variant="h2" color="secondary">
+                  Create An Account
+                </Typography>
+              </Spacer>
               <Form>
                 <div className={classes.spacer}>
-                  <MyTextField name="email" label="Email" customStyle={{ width: '100%' }} />
+                  <MyTextField name="email" label="Email" customStyle={{ width: 100 }} />
                 </div>
 
-                <div className={classes.spacer}>
+                <Spacer>
                   <MyPasswordTextField
                     name="password"
                     label="Password"
                     required
-                    customStyle={{ width: '100%' }}
+                    customStyle={{ width: 100 }}
                   />
-                </div>
+                </Spacer>
 
-                <div className={classes.spacer}>
+                <Spacer>
                   <MyPasswordTextField
                     name="passwordConfirm"
                     label="Confirm Password"
                     required
-                    customStyle={{ width: '100%' }}
+                    customStyle={{ width: 100 }}
                   />
-                </div>
+                </Spacer>
 
                 <Button
                   variant="contained"
                   color="secondary"
                   size="large"
                   type="submit"
-                  disabled={!dirty || !isValid || loadingREDUX}
+                  disabled={!dirty || !isValid || loading}
                 >
                   Sign Up
                 </Button>
-                {loadingREDUX && <CircularProgress size={24} className={classes.buttonProgress} />}
+                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 
-                <div className={`${classes.spacer} ${classModule.AccountSwitch}`}>
-                  <p>Already have an account?</p>
-                  <Link to="/login">Sign In</Link>
-                </div>
-
+                <Spacer>
+                  <div className={classModule.AccountSwitch}>
+                    <p>Already have an account?</p>
+                    <Link to="/login">Sign In</Link>
+                  </div>
+                </Spacer>
                 <pre className={classes.valueDisplay}>{JSON.stringify(values, null, 4)}</pre>
                 <pre className={classes.valueDisplay}>{JSON.stringify(errors, null, 4)}</pre>
               </Form>
@@ -172,4 +163,4 @@ const CreateAccount = (props) => {
   );
 };
 
-export default CreateAccount;
+export default withNetworkErrorHandler(CreateAccount);

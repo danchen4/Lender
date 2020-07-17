@@ -1,28 +1,24 @@
 import React, { useState } from 'react';
+// Redux
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionApp from '../../../store/actions/index';
-
+// MaterialUI
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../theme';
-
+import { customTheme } from '../../../theme/theme';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-
+// Components
 import EditIncomeSourceForm from './Forms/EditIncomeSourceForm';
 import AddIncomeSourceForm from './Forms/AddIncomeSourceForm';
-
+import { Spacer } from '../../UI/CustomUI/Spacer/Spacer';
+import { FlexBox } from '../../UI/CustomUI/Flexbox/Flexbox';
+// CSS
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import classModule from './Income.module.css';
 
-import useTraceUpdate from '../../../hooks/trace-update';
-
 const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: '30px',
-  },
-
   box: {
     padding: '0.5rem',
   },
@@ -43,13 +39,6 @@ const useStyles = makeStyles((theme) => ({
   editIncome: {
     padding: '1rem',
   },
-  spacer: {
-    padding: '24px 0',
-  },
-  flex: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
   button: {
     margin: '1rem',
     backgroundColor: customTheme.palette.primary.dark,
@@ -69,10 +58,6 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 1rem',
     fontSize: '14px',
   },
-  select: {
-    width: (customStyle) => customStyle.width || null,
-    textAlign: 'left',
-  },
   valueDisplay: {
     marginTop: '40px',
     width: '500px',
@@ -81,13 +66,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormEmployer = React.memo((props) => {
-  console.log('<FormIncome /> RENDER');
-  console.log('<FormIncome />  match', props.match);
-  useTraceUpdate(props);
-
+const FormEmployer = React.memo(({ pathNext, pathPrev, history }) => {
   const classes = useStyles();
-  const { pathNext, pathPrev, history } = props;
   const [showForm, setShowForm] = useState(false);
 
   const dispatch = useDispatch();
@@ -101,7 +81,6 @@ const FormEmployer = React.memo((props) => {
     dispatch(actionApp.editIncomeArray(index, editable));
 
   const nextStep = () => {
-    console.log('<FormIncome /> next step');
     history.push({ pathname: pathNext });
   };
 
@@ -118,9 +97,11 @@ const FormEmployer = React.memo((props) => {
       <Box component="div" className={classes.box}>
         <Paper className={classes.paper} elevation={2}>
           <div className={classes.spacer}>
-            <Typography variant="h4" color="secondary">
-              Source of Income
-            </Typography>
+            <Spacer margin={3}>
+              <Typography variant="h2" color="secondary">
+                Source of Income
+              </Typography>
+            </Spacer>
           </div>
 
           <TransitionGroup>
@@ -136,11 +117,11 @@ const FormEmployer = React.memo((props) => {
                     exit: classModule.fadeExitActive,
                   }}
                 >
-                  <div className={classes.spacer}>
+                  <Spacer>
                     <Card variant="outlined" className={classes.card}>
                       <CardContent className={classes.cardContent}>
                         <div className={classModule.CardHeader}>
-                          <Typography variant="h6">
+                          <Typography variant="h5">
                             Income Source:{' '}
                             <span className={classModule.Darken}>
                               {incomeSource.employerData.employerName.value ||
@@ -169,7 +150,7 @@ const FormEmployer = React.memo((props) => {
                           />
                         )}
                       </CardContent>
-                      <div className={classes.flex}>
+                      <FlexBox justify="space-between">
                         <CardActions className={classes.cardActions}>
                           <Button
                             className={classes.textbutton1}
@@ -189,15 +170,15 @@ const FormEmployer = React.memo((props) => {
                             Delete
                           </Button>
                         </CardActions>
-                      </div>
+                      </FlexBox>
                     </Card>
-                  </div>
+                  </Spacer>
                 </CSSTransition>
               );
             })}
           </TransitionGroup>
 
-          <div className={classes.spacer}>
+          <Spacer>
             <Button
               variant="contained"
               color="secondary"
@@ -208,7 +189,7 @@ const FormEmployer = React.memo((props) => {
             >
               Add Source
             </Button>
-          </div>
+          </Spacer>
 
           {showForm && (
             <AddIncomeSourceForm
@@ -218,7 +199,7 @@ const FormEmployer = React.memo((props) => {
             />
           )}
 
-          <div className={classes.spacer}>
+          <Spacer>
             <Button
               variant="contained"
               color="secondary"
@@ -239,7 +220,7 @@ const FormEmployer = React.memo((props) => {
             >
               Next Step
             </Button>
-          </div>
+          </Spacer>
         </Paper>
       </Box>
     </div>

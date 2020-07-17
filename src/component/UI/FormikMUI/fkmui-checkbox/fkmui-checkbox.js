@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { FormControl } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -11,31 +11,39 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { useField } from 'formik';
 import classModule from './fkmui-checkbox.module.css';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   formSelect: {
-    width: (customStyle) => customStyle.width || null,
+    width: (customStyle) => (customStyle.width || 100) + '%',
     textAlign: 'left',
     fontWeight: '600',
+  },
+  label: {
+    fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
+    },
   },
   errorMessage: {
     color: 'rgba(164, 49, 41, 1)',
     margin: '3px 14px 0 14px',
-    fontSize: '0.75rem',
+    fontSize: '1.4rem',
     textAlign: 'left',
-    fontWeight: '400',
+    fontWeight: 'normal',
     lineHeight: '1.66',
     letterSpacing: '0.03333em',
     fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif`,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.2rem',
+    },
   },
   MenuInput: {
     textAlign: 'left',
   },
-});
+}));
 
-const MySelect = ({ label, required, ...props }) => {
-  const { customStyle } = props;
-  const classes = useStyles(customStyle);
-  const [fieldprops, meta] = useField(props);
+const MySelect = ({ label, required, customStyle, name }) => {
+  const classesMUI = useStyles(customStyle);
+  const [fieldprops, meta] = useField(name);
   const errorText = meta.error && meta.touched && meta.error;
 
   return (
@@ -43,16 +51,20 @@ const MySelect = ({ label, required, ...props }) => {
       <FormControl
         className={
           meta.error && meta.touched
-            ? `${classes.formSelect} ${classModule.Shake}`
-            : classes.formSelect
+            ? `${classesMUI.formSelect} ${classModule.Shake}`
+            : classesMUI.formSelect
         }
         required={required}
         error={!!errorText}
       >
         <FormGroup row>
-          <FormControlLabel control={<Checkbox {...fieldprops} />} label={label} />
+          <FormControlLabel
+            control={<Checkbox {...fieldprops} size="medium" />}
+            label={label}
+            classes={{ label: classesMUI.label }}
+          />
         </FormGroup>
-        <FormHelperText>{errorText}</FormHelperText>
+        <FormHelperText className={classesMUI.errorMessage}>{errorText}</FormHelperText>
       </FormControl>
     </React.Fragment>
   );

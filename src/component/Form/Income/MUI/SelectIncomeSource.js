@@ -1,52 +1,69 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
-  spacer: {
-    margin: '24px 0',
+  formControl: {
+    width: (customStyle) => (customStyle.width || 100) + '%',
+    textAlign: 'left',
   },
-  flex: {
-    display: 'flex',
-    justifyContent: 'space-between',
+  label: {
+    fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
   },
   select: {
-    width: (customStyle) => customStyle.width || null,
-    textAlign: 'left',
+    fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
   },
-  valueDisplay: {
-    marginTop: '40px',
-    width: '500px',
-    margin: 'auto',
-    textAlign: 'left',
+  menuItem: {
+    fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
+    },
   },
 }));
 
-const SelectIncomeSource = (props) => {
-  const { customStyle } = props;
-  const classes = useStyles(customStyle);
+const SelectIncomeSource = ({ values, customStyle, setIncomeType, setFieldValue }) => {
+  const classesMUI = useStyles(customStyle);
 
   return (
-    <FormControl variant="outlined" className={classes.select}>
-      <InputLabel>Source of Income</InputLabel>
+    <FormControl variant="outlined" className={classesMUI.formControl}>
+      <InputLabel className={classesMUI.label}>Source of Income</InputLabel>
       <Select
+        className={classesMUI.select}
         name="incomeSource"
-        value={props.values.incomeSource}
-        onChange={(event) => {
-          props.setIncomeType(event.target.value);
-          props.setFieldValue('incomeSource', event.target.value);
-        }}
         label="Source of Income"
+        value={values.incomeSource}
+        onChange={(event) => {
+          setIncomeType(event.target.value);
+          setFieldValue('incomeSource', event.target.value);
+        }}
       >
-        <MenuItem value="">
+        <MenuItem
+          classes={{
+            root: classesMUI.menuItem,
+          }}
+          value=""
+        >
           <em>None</em>
         </MenuItem>
-        <MenuItem value="Employment">Employment</MenuItem>
-        <MenuItem value="Other">Other (Retirement / Pension)</MenuItem>
+        <MenuItem
+          classes={{
+            root: classesMUI.menuItem,
+          }}
+          value="Employment"
+        >
+          Employment
+        </MenuItem>
+        <MenuItem
+          classes={{
+            root: classesMUI.menuItem,
+          }}
+          value="Other"
+        >
+          Other (Retirement / Pension)
+        </MenuItem>
       </Select>
     </FormControl>
   );

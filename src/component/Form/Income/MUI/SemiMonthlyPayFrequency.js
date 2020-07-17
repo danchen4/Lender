@@ -28,14 +28,14 @@ const SemiMonthlyPayFrequency = () => {
         label="1st Pay Date"
         options={semiMonthlyDate1Select}
         required
-        customStyle={{ width: '45%' }}
+        customStyle={{ width: 45 }}
       />
       <MySelect
         name="semiMonthlyDate2"
         label="2nd Pay Date"
         options={semiMonthlyDate2Select}
         required
-        customStyle={{ width: '45%' }}
+        customStyle={{ width: 45 }}
       />
     </div>
   );

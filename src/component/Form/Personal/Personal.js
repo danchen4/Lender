@@ -1,19 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+// Redux
 import { useDispatch, useSelector } from 'react-redux';
-import * as actionApp from '../../../store/actions/index';
-
+import * as actionApp from '../../../store/actions';
+// MaterialUi
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../theme';
-
+import { customTheme } from '../../../theme/theme';
+// Formik/Yup
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-
-import MyTextField from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
+// Components
+import { MyTextField } from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import MyMaskedTextField from '../../UI/FormikMUI/fkmui-textfield-masked/fkmui-textfield-masked';
-
-import useTraceUpdate from '../../../hooks/trace-update';
-// import { isArrayEqual } from '../../../utility/deepCompareArray';
+import { Spacer } from '../../UI/CustomUI/Spacer/Spacer';
+import { FlexBox } from '../../UI/CustomUI/Flexbox/Flexbox';
+import MySelectStates from '../../UI/FormikMUI/fkmui-select-states/fkmui-select-states';
+import { FormikData } from '../../../helper/FormikData';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,11 +30,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '6px',
     padding: theme.spacing(3),
   },
-  spacer: {
-    margin: '24px 0',
-  },
   button: {
     margin: '1rem',
+    padding: '1rem 3rem',
     backgroundColor: customTheme.palette.primary.dark,
   },
   valueDisplay: {
@@ -43,50 +43,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const phoneNumberMask = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-const delimiter = '-';
+const PHONE_NUMBER_MASK = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+const DELIMITER = '-';
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
+  address1: Yup.string().required().max(30),
+  address2: Yup.string().max(30),
+  city: Yup.string().required(),
+  state: Yup.string().required(),
+  zip: Yup.number('Zip code must be a number').required(),
   phone: Yup.string()
     .matches(/(^[0-9]+$)/, 'Please enter valid phone number')
     .required(),
 });
 
-const FormUserName = (props) => {
+const FIELD_VALUES = {
+  firstName: '',
+  lastName: '',
+  address1: '',
+  address2: '',
+  city: '',
+  state: '',
+  zip: '',
+  phone: '',
+};
+
+const FormUserName = ({ pathNext, history }) => {
   console.log('<FormPersonal /> RENDER');
-  console.log('<FormPersonal /> match', props.match);
-  useTraceUpdate(props);
-
-  console.log(Math.round(Math.random() * 500000));
-
+  const [firstTime, setFirstTime] = useState(true);
   const classes = useStyles();
-  const { pathNext, history } = props;
-
   const dispatch = useDispatch();
-
   const personalDataREDUX = useSelector((state) => state.application.personalData);
-  const onSetPersonalData = (userPersonalData) =>
-    dispatch(actionApp.setPersonalData(userPersonalData));
 
-  const initialValues = {
-    firstName: personalDataREDUX.firstName.value || '',
-    lastName: personalDataREDUX.lastName.value || '',
-    phone: personalDataREDUX.phone.value || '',
-  };
+  let sessionPersonalData = sessionStorage.getItem('sessionPersonalData');
+  let parsedData = JSON.parse(sessionPersonalData);
+  // After filling out the form and moving to the next step, if you hit the 'Back' button then dirty will be false (since initialValue and Value will be the same)
+  // which will make the 'Next Step' button disabled
+  // Check to see if there is a value for phone number that was stored in Redux state on submission.
+  // Also check to see if values were retried from session storage (which is stored upon submission)
+  // If there is, then this is not the first time visiting the page and dont' disable the 'Next Step' button.
+  useEffect(() => {
+    if (personalDataREDUX.phone.value || sessionPersonalData) setFirstTime(false);
+  }, [personalDataREDUX, sessionPersonalData]);
 
-  const nextStep = () => {
-    console.log('<FormPersonal /> nextStep');
-    history.push({ pathname: pathNext });
-  };
+  // if session stoarge has data then load as initial value
+  const initialValues = parsedData ? parsedData : FIELD_VALUES;
 
   const submitHandler = (values, actions) => {
-    actions.setSubmitting(true);
-    onSetPersonalData(values);
+    dispatch(actionApp.setPersonalData(values));
+    sessionStorage.setItem('sessionPersonalData', JSON.stringify(values));
     actions.setSubmitting(false);
     actions.resetForm();
-    nextStep();
+    history.push({ pathname: pathNext });
   };
 
   return (
@@ -98,54 +108,84 @@ const FormUserName = (props) => {
           submitHandler(values, actions);
         }}
       >
-        {({ values, errors, isSubmitting, dirty, isValid }) => (
+        {({ initialValues, values, errors, dirty, isSubmitting, isValid }) => (
           <Box compoenent="div" className={classes.box}>
             <Paper className={classes.paper} elevation={2}>
-              <Typography variant="h4" color="secondary">
-                User Information
-              </Typography>
+              <Spacer margin={3}>
+                <Typography variant="h2" color="secondary">
+                  Personal Information
+                </Typography>
+              </Spacer>
               <Form>
-                <div className={classes.spacer}>
+                <Spacer>
                   <MyTextField
                     name="firstName"
                     label="First Name"
                     required
-                    customStyle={{ width: '100%' }}
+                    customStyle={{ width: 100 }}
                   />
-                </div>
-
-                <div className={classes.spacer}>
+                </Spacer>
+                <Spacer>
                   <MyTextField
                     name="lastName"
                     label="Last Name"
                     required
-                    customStyle={{ width: '100%' }}
+                    customStyle={{ width: 100 }}
                   />
-                </div>
-
-                <div className={classes.spacer}>
+                </Spacer>
+                <Spacer>
+                  <MyTextField
+                    name="address1"
+                    label="Address 1"
+                    required
+                    customStyle={{ width: 100 }}
+                  />
+                </Spacer>
+                <Spacer>
+                  <MyTextField name="address2" label="Address 2" customStyle={{ width: 100 }} />
+                </Spacer>
+                <Spacer>
+                  <FlexBox justify="space-between">
+                    <MyTextField name="city" label="City" required customStyle={{ width: 50 }} />
+                    <MySelectStates
+                      name="state"
+                      label="State"
+                      required
+                      customStyle={{ width: 20 }}
+                    />
+                    <MyTextField name="zip" label="ZIP Code" required customStyle={{ width: 25 }} />
+                  </FlexBox>
+                </Spacer>
+                <Spacer>
                   <MyMaskedTextField
                     name="phone"
                     label="Phone Number"
-                    maskInput={phoneNumberMask}
-                    delimiter={delimiter}
+                    maskInput={PHONE_NUMBER_MASK}
+                    delimiter={DELIMITER}
                     required
-                    customStyle={{ width: '100%' }}
+                    customStyle={{ width: 100 }}
                   />
-                </div>
-
+                </Spacer>
                 <Button
                   variant="contained"
                   color="secondary"
                   size="large"
                   type="submit"
-                  disabled={!dirty || !isValid || isSubmitting}
+                  className={classes.button}
+                  disabled={(!dirty && firstTime) || !isValid}
                 >
                   Next Step
                 </Button>
 
-                <pre className={classes.valueDisplay}>{JSON.stringify(props.values, null, 4)}</pre>
-                <pre className={classes.valueDisplay}>{JSON.stringify(props.errors, null, 4)}</pre>
+                <FormikData
+                  show
+                  firstTime={firstTime}
+                  dirty={dirty}
+                  isValid={isValid}
+                  isSubmitting={isSubmitting}
+                  values={values}
+                  errors={errors}
+                />
               </Form>
             </Paper>
           </Box>
@@ -154,9 +194,5 @@ const FormUserName = (props) => {
     </div>
   );
 };
-
-// function compareMatch(prevProps, nextProps) {
-//   return isArrayEqual(prevProps.match, nextProps.match);
-// }
 
 export default FormUserName;

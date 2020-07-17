@@ -11,7 +11,7 @@ const MonthlyPayFrequency = (props) => {
         label="Day of Month"
         options={monthlyDateSelect}
         required
-        customStyle={{ width: '100%' }}
+        customStyle={{ width: 100 }}
       />
     </React.Fragment>
   );

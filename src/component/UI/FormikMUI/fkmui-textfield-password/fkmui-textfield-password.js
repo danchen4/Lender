@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import classModule from './fkmui-textfield-password.module.css';
-
+// Formik
+import { useField } from 'formik';
+// CSS
+import classes from './fkmui-textfield-password.module.css';
+// MaterialUI
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -10,30 +12,46 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { FormHelperText } from '@material-ui/core';
 
-import { useField, ErrorMessage } from 'formik';
-
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   textField: {
-    width: (customStyle) => customStyle.width || null,
+    width: (customStyle) => (customStyle.width || 100) + '%',
+  },
+  label: {
+    fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
+    paddingRight: '1rem',
+    textAlign: 'left',
+    backgroundColor: 'white',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
+    },
+  },
+  input: {
+    fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
+    },
   },
   errorMessage: {
     color: 'rgba(164, 49, 41, 1)',
     margin: '3px 14px 0 14px',
-    fontSize: '0.75rem',
+    fontSize: '1.4rem',
     textAlign: 'left',
-    fontWeight: '400',
+    fontWeight: 'normal',
     lineHeight: '1.66',
     letterSpacing: '0.03333em',
     fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif`,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.2rem',
+    },
   },
-});
+}));
 
-const MyPasswordTextField = ({ label, required, ...props }) => {
-  const { customStyle } = props;
-  const classes = useStyles(customStyle);
+export const MyPasswordTextField = ({ name, label, required, secondary, customStyle }) => {
+  const classesMUI = useStyles(customStyle);
   const [showPassword, setShowPassword] = useState(false);
-  const [fieldprops, meta] = useField(props);
+  const [fieldprops, meta] = useField(name);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -49,18 +67,19 @@ const MyPasswordTextField = ({ label, required, ...props }) => {
       <FormControl
         className={
           meta.error && meta.touched
-            ? `${classes.textField} ${classModule.Shake}`
-            : classes.textField
+            ? `${classesMUI.textField} ${classes.Shake}`
+            : classesMUI.textField
         }
         variant="outlined"
       >
-        <InputLabel>{label}</InputLabel>
+        <InputLabel className={classesMUI.label}>{label}</InputLabel>
         <OutlinedInput
-          type={showPassword ? 'text' : 'password'}
           {...fieldprops}
+          type={showPassword ? 'text' : 'password'}
+          inputProps={{ className: classesMUI.input }}
+          color={secondary && 'secondary'}
           required={required}
           error={!!errorText}
-          variant="outlined"
           label={label}
           endAdornment={
             <InputAdornment position="end">
@@ -71,14 +90,7 @@ const MyPasswordTextField = ({ label, required, ...props }) => {
           }
         />
       </FormControl>
-      <ErrorMessage>{() => <div className={classes.errorMessage}>{errorText}</div>}</ErrorMessage>
+      <FormHelperText className={classesMUI.errorMessage}>{errorText}</FormHelperText>
     </React.Fragment>
   );
 };
-
-MyPasswordTextField.propTypes = {
-  label: PropTypes.string.isRequired,
-  required: PropTypes.bool.isRequired,
-};
-
-export default MyPasswordTextField;

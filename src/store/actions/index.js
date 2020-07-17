@@ -1,10 +1,4 @@
-export {
-  loginAccount,
-  logoutAccount,
-  setAuthRedirectPath,
-  checkLoginState,
-  fetchUser,
-} from './auth';
+export { loginAccount, logoutAccount, checkLoginState, fetchUser } from './auth';
 export {
   setPersonalData,
   addIncomeArray,
@@ -12,5 +6,6 @@ export {
   udpateIncomeArray,
   editIncomeArray,
   clearApplicationData,
+  checkApplicationData,
 } from './application';
 export { submitApplication, fetchApplication } from './userApplications';

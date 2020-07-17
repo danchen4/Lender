@@ -1,28 +1,22 @@
 import React, { useState } from 'react';
-
+// FormikYup
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-
+// MaterialUI
 import { Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../../theme';
-
+import { customTheme } from '../../../../theme/theme';
+// Components
 import AddEmployerIncomeForm from './AddEmployerIncomeForm';
 import AddOtherIncomeForm from './AddOtherIncomeForm';
-
 import SelectIncomeSource from '../MUI/SelectIncomeSource';
-
-import setIncomeDataObject from '../setIncomeDataUtility';
+// Misc.
+import setIncomeDataObject from '../helper/setIncomeDataUtility';
+import { Spacer } from '../../../UI/CustomUI/Spacer/Spacer';
+import { FormikData } from '../../../../helper/FormikData';
 
 const useStyles = makeStyles((theme) => ({
-  spacer: {
-    margin: '24px 0',
-  },
-  flex: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
   button: {
     margin: '1rem',
     backgroundColor: customTheme.palette.primary.dark,
@@ -102,39 +96,52 @@ const validationSchema = Yup.object({
   }),
 });
 
-const AddIncomeSourceForm = (props) => {
-  const classes = useStyles();
-  const { showForm, addIncomeData, toggleForm } = props;
+const FIELD_VALUES = {
+  incomeSource: '',
+  employerName: '',
+  address1: '',
+  address2: '',
+  city: '',
+  state: '',
+  zip: '',
+  otherIncomeName: '',
+  grossIncome: '',
+  payFrequency: '',
+  nextPayDate: '',
+  weeklyPayDate: '',
+  monthlyPayDate: '',
+  semiMonthlyDate1: '',
+  semiMonthlyDate2: '',
+};
 
+const setSessionStorage = (values) => {
+  let sessionIncomeData = sessionStorage.getItem('sessionIncomeData');
+
+  if (sessionIncomeData) {
+    let parsedData = JSON.parse(sessionIncomeData);
+    console.log('parsedData', parsedData);
+    sessionStorage.setItem('sessionIncomeData', JSON.stringify(parsedData.concat(values)));
+    return;
+  }
+  sessionStorage.setItem('sessionIncomeData', JSON.stringify([values]));
+};
+
+const AddIncomeSourceForm = ({ showForm, addIncomeData, toggleForm }) => {
+  const classes = useStyles();
   const [incomeType, setIncomeType] = useState('');
 
-  let initialValues = {
-    incomeSource: '',
-    employerName: '',
-    address1: '',
-    address2: '',
-    city: '',
-    state: '',
-    zip: '',
-    otherIncomeName: '',
-    grossIncome: '',
-    payFrequency: '',
-    nextPayDate: '',
-    weeklyPayDate: '',
-    monthlyPayDate: '',
-    semiMonthlyDate1: '',
-    semiMonthlyDate2: '',
-  };
+  let sessionIncomeData = sessionStorage.getItem('sessionIncomeData');
+  let parsedData = JSON.parse(sessionIncomeData);
+
+  const initialValues = parsedData ? parsedData : FIELD_VALUES;
 
   const submitHandler = async (values, actions) => {
-    actions.setSubmitting(true);
     const incomeInputValues = setIncomeDataObject(values);
     await addIncomeData(incomeInputValues); //need  await or else toggleForm() will unmount before state is updated
+    setSessionStorage(values);
     actions.setSubmitting(false);
     actions.resetForm();
     toggleForm();
-
-    // setTimeout(()=>toggleForm(),100)
   };
 
   let form = '';
@@ -149,28 +156,27 @@ const AddIncomeSourceForm = (props) => {
       >
         {(props) => (
           <Form>
-            <div className={classes.spacer}>
+            <Spacer>
               <SelectIncomeSource
                 {...props}
                 setIncomeType={setIncomeType}
-                customStyle={{ width: '100%' }}
+                customStyle={{ width: 100 }}
               />
-            </div>
+            </Spacer>
 
             {incomeType === 'Employment' && <AddEmployerIncomeForm {...props} />}
             {incomeType === 'Other' && <AddOtherIncomeForm {...props} />}
 
-            <div className={classes.spacer}>
+            <Spacer>
               <Button
                 variant="contained"
                 color="secondary"
                 size="large"
                 className={classes.button}
-                onClick={(event) => {
+                onClick={() => {
                   setIncomeType('');
                   props.setFieldValue('incomeSource', '');
                   toggleForm();
-                  // console.log(props.values);
                 }}
               >
                 Cancel
@@ -186,10 +192,14 @@ const AddIncomeSourceForm = (props) => {
               >
                 Save
               </Button>
-            </div>
-
-            <pre className={classes.valueDisplay}>{JSON.stringify(props.values, null, 4)}</pre>
-            <pre className={classes.valueDisplay}>{JSON.stringify(props.errors, null, 4)}</pre>
+            </Spacer>
+            <FormikData
+              dirty={props.dirty}
+              isValid={props.isValid}
+              isSubmitting={props.isSubmitting}
+              values={props.values}
+              errors={props.errors}
+            />
           </Form>
         )}
       </Formik>

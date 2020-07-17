@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../theme';
+import { customTheme } from '../../theme/theme';
 import Grid from '@material-ui/core/Grid';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -13,8 +13,6 @@ import CardContent from '@material-ui/core/CardContent';
 import WordCarousel from '../UI/CustomUI/WordCarousel/WordCarousel';
 
 import classModule from './Home.module.css';
-import image from './woman-banner.jpg';
-
 import ButtonTransition from '../UI/CustomUI/ButtonTransition/ButtonTransition';
 
 const useStyles = makeStyles((theme) => ({
@@ -58,14 +56,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = (props) => {
   const classes = useStyles();
-  const wordArray = ['Hello', 'This', 'Is', 'A', 'Test'];
+  const wordArray = ['Get What You Need', 'Today', 'And Pay Later'];
 
   return (
     <React.Fragment>
       <div className={classModule.Banner}>
         <div className={classModule.BannerCard}>
-          <h3 className={classModule.BannerText}>SHOP NOW.</h3>
-          <h3 className={classModule.BannerText}>PAY LATER.</h3>
+          <h3 className={classModule.BannerText}>Shop Now.</h3>
+          <h3 className={classModule.BannerText}>Pay Later.</h3>
+          <WordCarousel wordArray={wordArray} />
           <ButtonTransition>APPLY NOW</ButtonTransition>
         </div>
       </div>

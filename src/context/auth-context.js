@@ -5,7 +5,7 @@ export const AuthContext = React.createContext({
   isAuth: false,
 });
 
-const AuthContextProvider = (props) => {
+export const AuthContextProvider = (props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const loginAccount = async (values, actions, isSignUp) => {
@@ -91,5 +91,3 @@ const AuthContextProvider = (props) => {
     </AuthContext.Provider>
   );
 };
-
-export default AuthContextProvider;

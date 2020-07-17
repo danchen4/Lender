@@ -1,10 +1,11 @@
 .Banner {
+  margin-top: -5rem;
   width: 100%;
   height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url(./woman-shopping.jpg);
+  background-image: url(../../images/woman-shopping.jpg);
   background-size: cover;
   background-position: center;
 }
@@ -21,7 +22,8 @@
 
 .BannerText {
   font-size: 24px;
-  margin: 12px 0;
+  padding-top: 6px;
+  margin: 0;
   letter-spacing: 3px;
 }
 
@@ -75,7 +77,6 @@
 
   .BannerText {
     font-size: 40px;
-    margin: 20px 0;
     letter-spacing: 5px;
   }
 }
