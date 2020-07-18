@@ -3,22 +3,24 @@ import React from 'react';
 import { MyTextField } from '../../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import { Typography } from '@material-ui/core';
 // Components
-import { Spacer } from '../../../UI/CustomUI/Spacer/Spacer';
+import { Spacer } from '../../../UI/Styled/Spacer';
 import { FlexBox } from '../../../UI/CustomUI/Flexbox/Flexbox';
 import MySelect from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
-import WeeklyPayFrequency from '../MUI/WeeklyPayFrequency';
-import BiweeklyPayFrequency from '../MUI/BiweeklyPayFrequency';
-import SemiMonthlyPayFrequency from '../MUI/SemiMonthlyPayFrequency';
-import MonthlyPayFrequency from '../MUI/MonthlyPayFrequency';
+import { WeeklyPayFrequency } from '../MUI/WeeklyPayFrequency';
+import { BiweeklyPayFrequency } from '../MUI/BiweeklyPayFrequency';
+import { SemiMonthlyPayFrequency } from '../MUI/SemiMonthlyPayFrequency';
+import { MonthlyPayFrequency } from '../MUI/MonthlyPayFrequency';
+import { ScTextBox } from '../../../UI/Styled/ScTextBox';
 // Misc.
 import { PAY_FREQUENCY_SELECT, OTHER_INCOME_SELECT } from '../constants';
 
-const AddOtherIncomeForm = (props) => {
+export const AddOtherIncomeForm = (props) => {
   return (
     <React.Fragment>
       <Typography variant="h4" color="secondary">
         Other Income Information
       </Typography>
+      <ScTextBox>Let us know when you get paid and the gross amount per pay check</ScTextBox>
 
       <Spacer>
         <MySelect
@@ -40,7 +42,7 @@ const AddOtherIncomeForm = (props) => {
           />
           <MyTextField
             name="grossIncome"
-            label="Gross Income Per Period"
+            label="Gross Income"
             required
             customStyle={{ width: 45 }}
           />
@@ -53,5 +55,3 @@ const AddOtherIncomeForm = (props) => {
     </React.Fragment>
   );
 };
-
-export default AddOtherIncomeForm;

@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import * as actionUserApp from '../../../store/actions/index';
+import * as actionApp from '../../../store/actions/index';
 // Material UI
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../theme/theme';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { purple } from '@material-ui/core/colors';
 import Card from '@material-ui/core/Card';
@@ -13,7 +12,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 // CSS
 import classModule from './Confirm.module.css';
-import { Spacer } from '../../UI/CustomUI/Spacer/Spacer';
+// Components
+import { Spacer } from '../../UI/Styled/Spacer';
 
 const useStyles = makeStyles((theme) => ({
   header1: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     margin: '1rem',
-    backgroundColor: customTheme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.dark,
   },
   buttonProgress: {
     color: purple[200],
@@ -55,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: -12,
   },
 }));
+
+const appDate = new Date();
+const appDateFormatted = `${appDate.getMonth() + 1}/${appDate.getDate()}/${appDate.getFullYear()}`;
+const appNumber = Math.round(Math.random() * 500000);
 
 const FormConfirm = ({ pathNext, pathPrev, history }) => {
   console.log('<Confirm /> RENDER');
@@ -68,8 +72,8 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
   const personalDataREDUX = useSelector((state) => state.application.personalData);
   const incomeDataREDUX = useSelector((state) => state.application.incomeData);
   const onSubmitApplication = (token, personalData, incomeData) =>
-    dispatch(actionUserApp.submitApplication(token, personalData, incomeData));
-  const onClearApplicationData = () => dispatch(actionUserApp.clearApplicationData());
+    dispatch(actionApp.submitApplication(token, personalData, incomeData));
+  const onClearApplicationData = () => dispatch(actionApp.clearApplicationData());
 
   const nextStep = () => {
     console.log('<Confirm /> next step');
@@ -80,12 +84,20 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
     history.push({ pathname: pathPrev });
   };
 
-  const appDate = new Date();
-  const appDateFormatted = `${
-    appDate.getMonth() + 1
-  }/${appDate.getDate()}/${appDate.getFullYear()}`;
+  const sessionPersonalData = sessionStorage.getItem('sessionPersonalData');
+  const parsedPersonalData = JSON.parse(sessionPersonalData);
+  const sessionIncomeData = sessionStorage.getItem('sessionIncomeData');
+  const parsedIncomeData = JSON.parse(sessionIncomeData);
 
-  const appNumber = Math.round(Math.random() * 500000);
+  useEffect(() => {
+    // if session storage has data and Redux state is empty (meaning browser was refreshed), retore Redux state with session data
+    if (parsedPersonalData && !personalDataREDUX.phone.value) {
+      dispatch(actionApp.setPersonalData(parsedPersonalData));
+    }
+    if (sessionIncomeData && !incomeDataREDUX.length) {
+      dispatch(actionApp.setIncomeArray(parsedIncomeData));
+    }
+  }, []);
 
   const applicationData = {
     userId: userIdREDUX,
@@ -95,10 +107,13 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
     appNumber: appNumber,
   };
 
+  console.log(applicationData);
+
   const submitApplicationHandler = () => {
     onSubmitApplication(tokenREDUX, applicationData);
     if (!errorREDUX) {
       onClearApplicationData();
+      sessionStorage.clear();
     }
     nextStep();
   };
@@ -124,18 +139,16 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
           <Card variant="outlined" className={classes.card}>
             <CardContent className={classes.cardContent}>
               <div className={classModule.CardHeader}>
-                <Typography variant="h6" className={classes.header2}>
-                  Personal Information
-                </Typography>
+                <Typography variant="h5">Personal Information</Typography>
               </div>
               <div className={classModule.CardList}>
-                <Grid container spacing={3}>
+                <Grid container spacing={4}>
                   {userValueArray.map((item) => {
                     return (
                       <Grid item xs={12} sm={6} key={item.id}>
                         <div className={classModule.CardSection}>
                           <div className={classModule.CardSectionHeader}>{item.label}</div>
-                          <div>{item.value}</div>
+                          <div className={classModule.CardSectionData}>{item.value}</div>
                         </div>
                       </Grid>
                     );
@@ -144,10 +157,10 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
               </div>
             </CardContent>
           </Card>
-          <div className={classes.spacer}>
+          <Spacer>
             {incomeDataREDUX.map((incomeSource, index) => {
               return (
-                <div className={classes.spacer} key={index}>
+                <Spacer key={index}>
                   <Card variant="outlined" className={classes.card}>
                     <CardContent className={classes.cardContent}>
                       <div className={classModule.CardHeader}>
@@ -171,10 +184,10 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
                       </div>
                     </CardContent>
                   </Card>
-                </div>
+                </Spacer>
               );
             })}
-          </div>
+          </Spacer>
         </Paper>
       </Box>
       <br />

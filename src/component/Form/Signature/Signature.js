@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // Redux
 import { useSelector } from 'react-redux';
-// MaterialUI
-import { Button, Typography, Paper, Box } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../theme/theme';
 // FormikYup
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+// MaterialUI
+import { Button, Typography, Paper, Box } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 // Components
 import { MyTextField } from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import MyCheckbox from '../../UI/FormikMUI/fkmui-checkbox/fkmui-checkbox';
-import { Spacer } from '../../UI/CustomUI/Spacer/Spacer';
+import { Spacer } from '../../UI/Styled/Spacer';
+import { FormikData } from '../../../helper/FormikData';
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -21,17 +21,11 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '600px',
     margin: 'auto',
     borderRadius: '6px',
-    padding: theme.spacing(3),
+    padding: theme.spacing(4),
   },
   button: {
     margin: '1rem',
-    backgroundColor: customTheme.palette.primary.dark,
-  },
-  valueDisplay: {
-    marginTop: '40px',
-    width: '500px',
-    margin: 'auto',
-    textAlign: 'left',
+    backgroundColor: theme.palette.primary.dark,
   },
 }));
 
@@ -48,6 +42,19 @@ const FormUserName = ({ pathNext, pathPrev, history }) => {
   console.log('<Signature /> RENDER');
   const classes = useStyles();
   const personalDataREDUX = useSelector((state) => state.application.personalData);
+  let firstName, lastName;
+
+  const sessionPersonalData = sessionStorage.getItem('sessionPersonalData');
+  const parsedData = JSON.parse(sessionPersonalData);
+
+  if (parsedData && !personalDataREDUX.phone.value) {
+    firstName = parsedData.firstName;
+    lastName = parsedData.lastName;
+  } else {
+    firstName = personalDataREDUX.firstName.value;
+    lastName = personalDataREDUX.lastName.value;
+  }
+  console.log({ firstName, lastName });
 
   const validationSchema = Yup.object({
     agreeTerms: Yup.boolean().oneOf([true], 'Must accept Terms and Conditions').required(),
@@ -55,7 +62,7 @@ const FormUserName = ({ pathNext, pathPrev, history }) => {
     signature: Yup.string()
       .trim()
       .oneOf(
-        [`${personalDataREDUX.firstName.value} ${personalDataREDUX.lastName.value}`],
+        [`${firstName} ${lastName}`],
         'Name on Signature must match exactly first and last name on application'
       )
       .required(),
@@ -140,8 +147,14 @@ const FormUserName = ({ pathNext, pathPrev, history }) => {
                   Review Application
                 </Button>
 
-                <pre className={classes.valueDisplay}>{JSON.stringify(values, null, 4)}</pre>
-                <pre className={classes.valueDisplay}>{JSON.stringify(errors, null, 4)}</pre>
+                <FormikData
+                  show
+                  dirty={dirty}
+                  isValid={isValid}
+                  isSubmitting={isSubmitting}
+                  values={values}
+                  errors={errors}
+                />
               </Form>
             </Paper>
           </Box>

@@ -2,6 +2,7 @@ export { loginAccount, logoutAccount, checkLoginState, fetchUser } from './auth'
 export {
   setPersonalData,
   addIncomeArray,
+  setIncomeArray,
   deleteIncomeArray,
   udpateIncomeArray,
   editIncomeArray,

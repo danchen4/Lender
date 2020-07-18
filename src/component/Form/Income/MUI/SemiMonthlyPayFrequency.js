@@ -12,13 +12,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const semiMonthlyDate1Select = [...Array(15).keys()].map((item) => ({ id: item++, value: item++ }));
-const semiMonthlyDate2Select = [...Array(16).keys()].map((item) => ({
+const SEMIMONTHLY_DATE1_SELECT = [...Array(15).keys()].map((item) => ({
+  id: item++,
+  value: item++,
+}));
+const SEMIMONTHLY_DATE2_SELECT = [...Array(16).keys()].map((item) => ({
   id: item++ + 15,
   value: item++ + 15,
 }));
 
-const SemiMonthlyPayFrequency = () => {
+export const SemiMonthlyPayFrequency = () => {
   const classes = useStyles();
 
   return (
@@ -26,19 +29,17 @@ const SemiMonthlyPayFrequency = () => {
       <MySelect
         name="semiMonthlyDate1"
         label="1st Pay Date"
-        options={semiMonthlyDate1Select}
+        options={SEMIMONTHLY_DATE1_SELECT}
         required
         customStyle={{ width: 45 }}
       />
       <MySelect
         name="semiMonthlyDate2"
         label="2nd Pay Date"
-        options={semiMonthlyDate2Select}
+        options={SEMIMONTHLY_DATE2_SELECT}
         required
         customStyle={{ width: 45 }}
       />
     </div>
   );
 };
-
-export default SemiMonthlyPayFrequency;

@@ -2,19 +2,20 @@ import React from 'react';
 // Material UI
 import { MyTextField } from '../../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import { Typography } from '@material-ui/core';
-import { Spacer } from '../../../UI/CustomUI/Spacer/Spacer';
+import { Spacer } from '../../../UI/Styled/Spacer';
 import { FlexBox } from '../../../UI/CustomUI/Flexbox/Flexbox';
 // Components
 import MySelectStates from '../../../UI/FormikMUI/fkmui-select-states/fkmui-select-states';
 import MySelect from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
-import WeeklyPayFrequency from '../MUI/WeeklyPayFrequency';
-import BiweeklyPayFrequency from '../MUI/BiweeklyPayFrequency';
-import SemiMonthlyPayFrequency from '../MUI/SemiMonthlyPayFrequency';
-import MonthlyPayFrequency from '../MUI/MonthlyPayFrequency';
+import { WeeklyPayFrequency } from '../MUI/WeeklyPayFrequency';
+import { BiweeklyPayFrequency } from '../MUI/BiweeklyPayFrequency';
+import { SemiMonthlyPayFrequency } from '../MUI/SemiMonthlyPayFrequency';
+import { MonthlyPayFrequency } from '../MUI/MonthlyPayFrequency';
+import { ScTextBox } from '../../../UI/Styled/ScTextBox';
 // Misc.
 import { PAY_FREQUENCY_SELECT } from '../constants';
 
-const AddEmployerIncomeForm = (props) => {
+export const AddEmployerIncomeForm = (props) => {
   return (
     <React.Fragment>
       <Spacer>
@@ -38,16 +39,19 @@ const AddEmployerIncomeForm = (props) => {
       </Spacer>
 
       <Spacer>
+        <MyTextField name="city" label="City" required customStyle={{ width: 100 }} />
+      </Spacer>
+      <Spacer>
         <FlexBox justify="space-between">
-          <MyTextField name="city" label="City" required customStyle={{ width: 50 }} />
-          <MySelectStates name="state" label="State" required customStyle={{ width: 20 }} />
-          <MyTextField name="zip" label="ZIP Code" required customStyle={{ width: 25 }} />
+          <MySelectStates name="state" label="State" required customStyle={{ width: 45 }} />
+          <MyTextField name="zip" label="ZIP Code" required customStyle={{ width: 45 }} />
         </FlexBox>
       </Spacer>
 
       <Typography variant="h4" color="secondary">
         Employment Income Information
       </Typography>
+      <ScTextBox>Let us know when you get paid and the gross amount per pay check</ScTextBox>
 
       <Spacer>
         <FlexBox justify="space-between">
@@ -60,7 +64,7 @@ const AddEmployerIncomeForm = (props) => {
           />
           <MyTextField
             name="grossIncome"
-            label="Gross Income Per Period"
+            label="Gross Income"
             required
             customStyle={{ width: 45 }}
           />
@@ -74,5 +78,3 @@ const AddEmployerIncomeForm = (props) => {
     </React.Fragment>
   );
 };
-
-export default AddEmployerIncomeForm;

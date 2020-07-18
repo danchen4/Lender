@@ -1,38 +1,22 @@
 import React, { useState } from 'react';
+// Redux
+import { useDispatch } from 'react-redux';
+import * as actionApp from '../../../../store/actions';
 // FormikYup
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 // MaterialUI
-import { Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
-import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../../theme/theme';
 // Components
-import AddEmployerIncomeForm from './AddEmployerIncomeForm';
-import AddOtherIncomeForm from './AddOtherIncomeForm';
-import SelectIncomeSource from '../MUI/SelectIncomeSource';
+import { AddEmployerIncomeForm } from './AddEmployerIncomeForm';
+import { AddOtherIncomeForm } from './AddOtherIncomeForm';
+import { SelectIncomeSource } from '../MUI/SelectIncomeSource';
+import { Spacer } from '../../../UI/Styled';
+import { ScButton } from '../../../UI/Styled';
 // Misc.
 import setIncomeDataObject from '../helper/setIncomeDataUtility';
-import { Spacer } from '../../../UI/CustomUI/Spacer/Spacer';
 import { FormikData } from '../../../../helper/FormikData';
-
-const useStyles = makeStyles((theme) => ({
-  button: {
-    margin: '1rem',
-    backgroundColor: customTheme.palette.primary.dark,
-  },
-  button2: {
-    width: '35%',
-    fontSize: '14px',
-    backgroundColor: customTheme.palette.primary.dark,
-  },
-  valueDisplay: {
-    marginTop: '40px',
-    width: '500px',
-    margin: 'auto',
-    textAlign: 'left',
-  },
-}));
+import { FlexBox } from '../../../UI/CustomUI/Flexbox/Flexbox';
 
 const validationSchema = Yup.object({
   incomeSource: Yup.string().required(),
@@ -96,7 +80,7 @@ const validationSchema = Yup.object({
   }),
 });
 
-const FIELD_VALUES = {
+const initialValues = {
   incomeSource: '',
   employerName: '',
   address1: '',
@@ -114,31 +98,13 @@ const FIELD_VALUES = {
   semiMonthlyDate2: '',
 };
 
-const setSessionStorage = (values) => {
-  let sessionIncomeData = sessionStorage.getItem('sessionIncomeData');
-
-  if (sessionIncomeData) {
-    let parsedData = JSON.parse(sessionIncomeData);
-    console.log('parsedData', parsedData);
-    sessionStorage.setItem('sessionIncomeData', JSON.stringify(parsedData.concat(values)));
-    return;
-  }
-  sessionStorage.setItem('sessionIncomeData', JSON.stringify([values]));
-};
-
-const AddIncomeSourceForm = ({ showForm, addIncomeData, toggleForm }) => {
-  const classes = useStyles();
+export const AddIncomeSourceForm = ({ showForm, toggleForm }) => {
   const [incomeType, setIncomeType] = useState('');
-
-  let sessionIncomeData = sessionStorage.getItem('sessionIncomeData');
-  let parsedData = JSON.parse(sessionIncomeData);
-
-  const initialValues = parsedData ? parsedData : FIELD_VALUES;
+  const dispatch = useDispatch();
 
   const submitHandler = async (values, actions) => {
     const incomeInputValues = setIncomeDataObject(values);
-    await addIncomeData(incomeInputValues); //need  await or else toggleForm() will unmount before state is updated
-    setSessionStorage(values);
+    await dispatch(actionApp.addIncomeArray(incomeInputValues));
     actions.setSubmitting(false);
     actions.resetForm();
     toggleForm();
@@ -168,30 +134,32 @@ const AddIncomeSourceForm = ({ showForm, addIncomeData, toggleForm }) => {
             {incomeType === 'Other' && <AddOtherIncomeForm {...props} />}
 
             <Spacer>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                className={classes.button}
-                onClick={() => {
-                  setIncomeType('');
-                  props.setFieldValue('incomeSource', '');
-                  toggleForm();
-                }}
-              >
-                Cancel
-              </Button>
-
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                type="submit"
-                startIcon={<SaveIcon />}
-                disabled={!props.dirty || !props.isValid || props.isSubmitting}
-              >
-                Save
-              </Button>
+              <FlexBox justify="space-evenly">
+                <ScButton
+                  variant="outlined"
+                  variantColor="error"
+                  width="45%"
+                  padding="1rem 2rem"
+                  onClick={() => {
+                    setIncomeType('');
+                    props.setFieldValue('incomeSource', '');
+                    toggleForm();
+                  }}
+                >
+                  Cancel
+                </ScButton>
+                <ScButton
+                  variant="outlined"
+                  variantColor="primary"
+                  width="45%"
+                  padding="1rem 2rem"
+                  type="submit"
+                  disabled={!props.dirty || !props.isValid || props.isSubmitting}
+                >
+                  Save
+                  <SaveIcon />
+                </ScButton>
+              </FlexBox>
             </Spacer>
             <FormikData
               dirty={props.dirty}
@@ -208,5 +176,3 @@ const AddIncomeSourceForm = ({ showForm, addIncomeData, toggleForm }) => {
 
   return <React.Fragment>{form}</React.Fragment>;
 };
-
-export default AddIncomeSourceForm;

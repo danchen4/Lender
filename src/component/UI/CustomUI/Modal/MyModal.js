@@ -2,7 +2,6 @@ import React from 'react';
 import classModule from './MyModal.module.css';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../../theme/theme';
 
 const useStyles = makeStyles((theme) => ({
   spacer: {
@@ -10,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     margin: '1rem',
-    backgroundColor: customTheme.palette.error.light,
+    backgroundColor: theme.palette.error.light,
     color: 'white',
   },
 }));

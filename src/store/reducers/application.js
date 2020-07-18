@@ -35,17 +35,28 @@ const addIncomeArray = (state, action) => {
   };
 };
 
-const deleteIncomeArray = (state, action) => {
+const setIncomeArray = (state, action) => {
   return {
     ...state,
-    incomeData: state.incomeData.splice(action.index, 1),
+    incomeData: action.incomeArray,
+  };
+};
+
+const deleteIncomeArray = (state, action) => {
+  let incomeDataArrayCopy = cloneDeep(state.incomeData);
+  incomeDataArrayCopy.splice(action.index, 1);
+  return {
+    ...state,
+    incomeData: incomeDataArrayCopy,
   };
 };
 
 const udpateIncomeArray = (state, action) => {
+  let incomeDataArrayCopy = cloneDeep(state.incomeData);
+  incomeDataArrayCopy.splice(action.index, 1, action.incomeDataObject);
   return {
     ...state,
-    incomeData: state.incomeData.splice(action.index, 1, action.incomeDataObject),
+    incomeData: incomeDataArrayCopy,
   };
 };
 
@@ -79,6 +90,8 @@ export default (state = initialState, action) => {
       return setPersonalData(state, action);
     case actionTypes.ADD_INCOME_ARRAY:
       return addIncomeArray(state, action);
+    case actionTypes.SET_INCOME_ARRAY:
+      return setIncomeArray(state, action);
     case actionTypes.DELETE_INCOME_ARRAY:
       return deleteIncomeArray(state, action);
     case actionTypes.UPDATE_INCOME_ARRAY:

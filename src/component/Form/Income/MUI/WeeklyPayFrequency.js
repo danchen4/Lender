@@ -1,7 +1,7 @@
 import React from 'react';
 import MySelect from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
 
-const weeklyPayDateSelect = [
+const WEEKLY_PAYDATE_SELECT = [
   { id: 'monday', value: 'Monday' },
   { id: 'tuesday', value: 'Tuesday' },
   { id: 'wednesday', value: 'Wednesday' },
@@ -9,13 +9,13 @@ const weeklyPayDateSelect = [
   { id: 'friday', value: 'Friday' },
 ];
 
-const WeeklyPayFrequency = () => {
+export const WeeklyPayFrequency = () => {
   return (
     <React.Fragment>
       <MySelect
         name="weeklyPayDate"
         label="Day of Week"
-        options={weeklyPayDateSelect}
+        options={WEEKLY_PAYDATE_SELECT}
         required
         customStyle={{ width: 100 }}
       />

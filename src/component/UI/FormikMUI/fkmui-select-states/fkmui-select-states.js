@@ -41,9 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MySelectStates = ({ label, required, ...props }) => {
-  const classesMUI = useStyles();
-  const [fieldprops, meta] = useField(props);
+const MySelectStates = ({ label, required, customStyle, name }) => {
+  const classesMUI = useStyles(customStyle);
+  const [fieldprops, meta] = useField(name);
   const errorText = meta.error && meta.touched && meta.error;
 
   return (

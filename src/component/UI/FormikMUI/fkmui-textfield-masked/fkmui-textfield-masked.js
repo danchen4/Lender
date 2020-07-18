@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   errorMessage: {
-    color: 'rgba(164, 49, 41, 1)',
+    color: theme.palette.error.main,
     margin: '3px 14px 0 14px',
     fontSize: '1.4rem',
     textAlign: 'left',

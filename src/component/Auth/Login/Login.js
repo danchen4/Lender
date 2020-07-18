@@ -8,47 +8,26 @@ import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 // Material UI
-import { Button, Typography, Paper, Box } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../theme/theme';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { purple } from '@material-ui/core/colors';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 // Components
 import { MyPasswordTextField } from '../../UI/FormikMUI/fkmui-textfield-password/fkmui-textfield-password';
 import { MyTextField } from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
+import { Spacer } from '../../UI/Styled/Spacer';
+import { ScCard, ScHeader } from '../../UI/Styled';
+import { ScTextBox } from '../../UI/Styled/ScTextBox';
+import { ScButton } from '../../UI/Styled/ScButton';
 // CSS
 import classModule from './Login.module.css';
 // Misc.
 import withNetworkErrorHandler from '../../../hoc/withNetworkErrorHandler';
-import { Spacer } from '../../UI/CustomUI/Spacer/Spacer';
+import { FormikData } from '../../../helper/FormikData';
 
 const useStyles = makeStyles((theme) => ({
-  box: {
-    padding: '0.5rem',
-  },
-  paper: {
-    maxWidth: '600px',
-    margin: '0 auto',
-    borderRadius: '6px',
-    padding: theme.spacing(3),
-  },
-  button: {
-    margin: '1rem',
-    backgroundColor: customTheme.palette.primary.dark,
-  },
-  valueDisplay: {
-    marginTop: '40px',
-    width: '500px',
-    margin: 'auto',
-    textAlign: 'left',
-  },
-  buttonProgress: {
-    color: purple[200],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
+  link: {
+    color: theme.palette.secondary.main,
   },
 }));
 
@@ -63,11 +42,9 @@ const initialValues = {
 };
 
 const SignIn = ({ pathNext, history }) => {
-  console.log('<Login /> RENDER');
   const classes = useStyles();
-
   const dispatch = useDispatch();
-  const loadingREDUX = useSelector((state) => state.auth.loading);
+  const loading = useSelector((state) => state.auth.loading);
   const onLogin = (values, actions, isSignUp, redirect, history) =>
     dispatch(actionAuth.loginAccount(values, actions, isSignUp, redirect, history));
 
@@ -90,59 +67,48 @@ const SignIn = ({ pathNext, history }) => {
         }}
       >
         {({ values, errors, isSubmitting, dirty, isValid }) => (
-          <Box component="div" className={classes.box}>
-            <Paper className={classes.paper} elevation={2}>
-              <Spacer margin={3}>
-                <Typography variant="h2" color="secondary">
-                  Log In
-                </Typography>
+          <ScCard>
+            <ScHeader as="h2" fontSize={2.6} fontWeight={400} color="secondary" mBot={1} mTop={2}>
+              Log In
+            </ScHeader>
+
+            <Form>
+              <Spacer>
+                <MyTextField
+                  name="email"
+                  label="Email"
+                  required
+                  // autoFocus={true}
+                  customStyle={{ width: 100 }}
+                />
               </Spacer>
-              <Form>
-                <Spacer>
-                  <MyTextField
-                    name="email"
-                    label="Email"
-                    required
-                    // autoFocus={true}
-                    customStyle={{ width: 100 }}
-                  />
-                </Spacer>
-                <Spacer>
-                  <MyPasswordTextField
-                    name="password"
-                    label="Password"
-                    required
-                    customStyle={{ width: 100 }}
-                  />
-                </Spacer>
-                {/* <div className={classes.spacer}>
-                <MyTextField name="passwordConfirm" label="Confirm Password" customStyle={{width: '100%'}} />
-              </div> */}
+              <Spacer>
+                <MyPasswordTextField
+                  name="password"
+                  label="Password"
+                  required
+                  customStyle={{ width: 100 }}
+                />
+              </Spacer>
+              <ScButton variant="secondary" type="submit" disabled={!dirty || !isValid || loading}>
+                Log In
+                <KeyboardArrowRightIcon />
+                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+              </ScButton>
 
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  type="submit"
-                  disabled={!dirty || !isValid || loadingREDUX}
-                >
-                  Login
-                </Button>
-                {loadingREDUX && <CircularProgress size={24} className={classes.buttonProgress} />}
-                <Spacer>
-                  <div className={classModule.AccountSwitch}>
-                    <p>Don't have an account?</p>
-                    <Link to="/signup" className={classModule.Link}>
-                      Sign Up
-                    </Link>
-                  </div>
-                </Spacer>
-
-                <pre className={classes.valueDisplay}>{JSON.stringify(values, null, 4)}</pre>
-                <pre className={classes.valueDisplay}>{JSON.stringify(errors, null, 4)}</pre>
-              </Form>
-            </Paper>
-          </Box>
+              <Spacer>
+                <div className={classModule.AccountSwitch}>
+                  <ScTextBox secondary weight={700}>
+                    Don't have an account?
+                  </ScTextBox>
+                  <Link to="/signup" className={classes.link}>
+                    Sign Up
+                  </Link>
+                </div>
+              </Spacer>
+              <FormikData values={values} errors={errors} />
+            </Form>
+          </ScCard>
         )}
       </Formik>
     </div>

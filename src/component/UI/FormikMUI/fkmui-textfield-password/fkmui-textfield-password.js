@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
       fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
     },
   },
+  error: {
+    color: `${theme.palette.error.main} !important`,
+  },
   input: {
     fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
     [theme.breakpoints.down('sm')]: {
@@ -34,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   errorMessage: {
-    color: 'rgba(164, 49, 41, 1)',
+    color: theme.palette.error.main,
     margin: '3px 14px 0 14px',
     fontSize: '1.4rem',
     textAlign: 'left',
@@ -72,7 +75,15 @@ export const MyPasswordTextField = ({ name, label, required, secondary, customSt
         }
         variant="outlined"
       >
-        <InputLabel className={classesMUI.label}>{label}</InputLabel>
+        <InputLabel
+          className={
+            meta.error && meta.touched
+              ? `${classesMUI.label} ${classesMUI.error}`
+              : classesMUI.label
+          }
+        >
+          {label}
+        </InputLabel>
         <OutlinedInput
           {...fieldprops}
           type={showPassword ? 'text' : 'password'}

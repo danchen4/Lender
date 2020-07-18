@@ -12,8 +12,10 @@ import applicationReducer from './store/reducers/application';
 import authReducer from './store/reducers/auth';
 import userApplicationsReducer from './store/reducers/userApplications';
 
-import { ThemeProvider } from '@material-ui/core/styles';
-import { customTheme } from './theme/theme';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@material-ui/core';
+import { ThemeProvider } from 'styled-components';
+import { MUITheme, SCTheme } from './theme';
 
 const rootReducer = combineReducers({
   application: applicationReducer,
@@ -31,8 +33,11 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 const app = (
   <Provider store={store}>
     <BrowserRouter>
-      <ThemeProvider theme={customTheme}>
-        <App />
+      <ThemeProvider theme={SCTheme}>
+        <MuiThemeProvider theme={MUITheme}>
+          <CssBaseline />
+          <App />
+        </MuiThemeProvider>
       </ThemeProvider>
     </BrowserRouter>
   </Provider>

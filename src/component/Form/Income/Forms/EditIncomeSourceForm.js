@@ -6,13 +6,12 @@ import * as Yup from 'yup';
 import { Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../../theme/theme';
 // Components
-import AddEmployerIncomeForm from './AddEmployerIncomeForm';
-import AddOtherIncomeForm from './AddOtherIncomeForm';
+import { AddEmployerIncomeForm } from './AddEmployerIncomeForm';
+import { AddOtherIncomeForm } from './AddOtherIncomeForm';
 // Misc.
 import setIncomeDataObject from '../helper/setIncomeDataUtility';
-import { Spacer } from '../../../UI/CustomUI/Spacer/Spacer';
+import { Spacer } from '../../../UI/Styled/Spacer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,12 +26,12 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     margin: '1rem',
-    backgroundColor: customTheme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.dark,
   },
   button2: {
     width: '35%',
     fontSize: '14px',
-    backgroundColor: customTheme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.dark,
   },
   valueDisplay: {
     marginTop: '40px',
@@ -104,7 +103,7 @@ const validationSchema = Yup.object({
   }),
 });
 
-const EditIncomeSourceForm = ({ updateIncomeData, editIncomeData, values, index }) => {
+export const EditIncomeSourceForm = ({ updateIncomeData, editIncomeData, values, index }) => {
   const classes = useStyles();
   const [showForm, setShowForm] = useState(true);
 
@@ -194,5 +193,3 @@ const EditIncomeSourceForm = ({ updateIncomeData, editIncomeData, values, index 
     </React.Fragment>
   );
 };
-
-export default EditIncomeSourceForm;

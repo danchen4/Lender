@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   link: {
+    color: theme.palette.secondary.main,
     textDecoration: 'none',
-    color: 'white',
     fontWeight: '500',
     fontSize: '1.4rem',
     [theme.breakpoints.up('sm')]: {
@@ -42,8 +42,9 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   icon: {
-    height: '2rem',
-    width: '2rem',
+    color: theme.palette.secondary.main,
+    height: '3rem',
+    width: '3rem',
   },
   logo: {
     [theme.breakpoints.down('sm')]: {

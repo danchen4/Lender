@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
+// Redux
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionUserApp from '../../store/actions/index';
-
+// Material UI
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../theme/theme';
-
 import { purple } from '@material-ui/core/colors';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-
+// Misc.
 import withNetworkErrorHandler from '../../hoc/withNetworkErrorHandler';
+// CSS
 import classModule from './AccountDashboard.module.css';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     margin: '1rem',
-    backgroundColor: customTheme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.dark,
   },
   buttonProgress: {
     color: purple[200],

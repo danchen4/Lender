@@ -1,8 +1,9 @@
 import React from 'react';
-
+// Material UI
 import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { customTheme } from '../../../theme/theme';
+// CSS
+import styled from 'styled-components';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -10,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
   },
   header1: {
     padding: '1rem 0',
+  },
+  body1: {
+    fontSize: '2rem',
   },
   box: {
     padding: '0.5rem',
@@ -25,9 +29,14 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     margin: '1rem',
-    backgroundColor: customTheme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.dark,
   },
 }));
+
+const StyledMessage = styled.div`
+  padding: 2rem;
+  font-size: 2rem;
+`;
 
 const FormPersonal = (props) => {
   const classes = useStyles();
@@ -44,11 +53,13 @@ const FormPersonal = (props) => {
       <Box component="div" className={classes.box}>
         <Paper className={classes.paper} elevation={2}>
           <Typography variant="h4" color="primary" className={classes.header1}>
-            Success
+            Success!
           </Typography>
-          <Typography variant="body1" color="secondary">
-            Thank you for your submission.
-          </Typography>
+          <StyledMessage>
+            <Typography color="secondary" classes={{ body1: classes.body1 }}>
+              Thank you for your submission.
+            </Typography>
+          </StyledMessage>
           <div className={classes.spacer}>
             <Button variant="contained" color="secondary" size="large" onClick={nextStep}>
               Go To Application Dashboard

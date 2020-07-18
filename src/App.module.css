@@ -10,10 +10,6 @@
   background-color: #f1f4f4;
 }
 
-.App h2 {
-  margin: 20px 0;
-}
-
 .fadeEnter {
   opacity: 0;
   /* transform: translateX(-100%); */

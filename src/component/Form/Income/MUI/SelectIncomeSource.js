@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SelectIncomeSource = ({ values, customStyle, setIncomeType, setFieldValue }) => {
+export const SelectIncomeSource = ({ values, customStyle, setIncomeType, setFieldValue }) => {
   const classesMUI = useStyles(customStyle);
 
   return (
@@ -68,5 +68,3 @@ const SelectIncomeSource = ({ values, customStyle, setIncomeType, setFieldValue 
     </FormControl>
   );
 };
-
-export default SelectIncomeSource;

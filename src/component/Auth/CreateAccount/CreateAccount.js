@@ -8,42 +8,34 @@ import * as actionAuth from '../../../store/actions/index';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 // Material UI
-import { Button, Typography, Paper, Box } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { customTheme } from '../../../theme/theme';
-import { purple } from '@material-ui/core/colors';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 // Components
 import { MyTextField } from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import { MyPasswordTextField } from '../../UI/FormikMUI/fkmui-textfield-password/fkmui-textfield-password';
-//
+import { ScCard, ScHeader } from '../../UI/Styled';
+import { ScTextBox } from '../../UI/Styled/ScTextBox';
+import { ScButton } from '../../UI/Styled/ScButton';
+import { Spacer } from '../../UI/Styled/Spacer';
+// CSS
 import classModule from './CreateAccount.module.css';
 // Misc.
 import withNetworkErrorHandler from '../../../hoc/withNetworkErrorHandler';
-import { Spacer } from '../../UI/CustomUI/Spacer/Spacer';
+import { FormikData } from '../../../helper/FormikData';
 
 const useStyles = makeStyles((theme) => ({
-  box: {
-    padding: '0.5rem',
-  },
-  paper: {
-    maxWidth: '600px',
-    margin: 'auto',
-    borderRadius: '6px',
-    padding: theme.spacing(3),
-  },
-  button: {
-    margin: '1rem',
-    backgroundColor: customTheme.palette.primary.dark,
-  },
-  valueDisplay: {
-    marginTop: '40px',
-    width: '500px',
-    margin: 'auto',
-    textAlign: 'left',
+  link: {
+    textDecoration: 'none',
+    fontSize: '1.6rem',
+    color: theme.palette.secondary.main,
+    fontWeight: 500,
+    padding: '1rem 0',
+    display: 'inline-block',
   },
   buttonProgress: {
-    color: purple[200],
+    color: theme.palette.secondary.main,
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -105,58 +97,50 @@ const CreateAccount = ({ history, pathNext }) => {
         }}
       >
         {({ values, errors, dirty, isValid }) => (
-          <Box component="div" className={classes.box}>
-            <Paper className={classes.paper} elevation={2}>
-              <Spacer margin={3}>
-                <Typography variant="h2" color="secondary">
-                  Create An Account
-                </Typography>
+          <ScCard shadow="SmoothXs">
+            <ScHeader as="h2" fontSize={2.6} fontWeight={400} color="secondary" mBot={1} mTop={2}>
+              Create an account
+            </ScHeader>
+            <ScTextBox>Save your progress and stay updated on your loans</ScTextBox>
+            <Form>
+              <Spacer>
+                <MyTextField name="email" label="Email" customStyle={{ width: 100 }} />
               </Spacer>
-              <Form>
-                <div className={classes.spacer}>
-                  <MyTextField name="email" label="Email" customStyle={{ width: 100 }} />
-                </div>
-
-                <Spacer>
-                  <MyPasswordTextField
-                    name="password"
-                    label="Password"
-                    required
-                    customStyle={{ width: 100 }}
-                  />
-                </Spacer>
-
-                <Spacer>
-                  <MyPasswordTextField
-                    name="passwordConfirm"
-                    label="Confirm Password"
-                    required
-                    customStyle={{ width: 100 }}
-                  />
-                </Spacer>
-
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  type="submit"
-                  disabled={!dirty || !isValid || loading}
-                >
-                  Sign Up
-                </Button>
+              <Spacer>
+                <MyPasswordTextField
+                  name="password"
+                  label="Password"
+                  required
+                  customStyle={{ width: 100 }}
+                />
+              </Spacer>
+              <Spacer>
+                <MyPasswordTextField
+                  name="passwordConfirm"
+                  label="Confirm Password"
+                  required
+                  customStyle={{ width: 100 }}
+                />
+              </Spacer>
+              <ScButton variant="secondary" type="submit" disabled={!dirty || !isValid || loading}>
+                Sign Up
+                <KeyboardArrowRightIcon />
                 {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+              </ScButton>
 
-                <Spacer>
-                  <div className={classModule.AccountSwitch}>
-                    <p>Already have an account?</p>
-                    <Link to="/login">Sign In</Link>
-                  </div>
-                </Spacer>
-                <pre className={classes.valueDisplay}>{JSON.stringify(values, null, 4)}</pre>
-                <pre className={classes.valueDisplay}>{JSON.stringify(errors, null, 4)}</pre>
-              </Form>
-            </Paper>
-          </Box>
+              <Spacer>
+                <div className={classModule.AccountSwitch}>
+                  <ScTextBox secondary weight={700}>
+                    Already have an account?
+                  </ScTextBox>
+                  <Link to="/login" className={classes.link}>
+                    Sign In
+                  </Link>
+                </div>
+              </Spacer>
+              <FormikData values={values} errors={errors} />
+            </Form>
+          </ScCard>
         )}
       </Formik>
     </div>
