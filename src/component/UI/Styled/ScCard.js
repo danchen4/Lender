@@ -1,38 +1,45 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import styled, { ThemeContext } from 'styled-components';
+import styled from 'styled-components';
+import { COLOR } from '../../../theme';
 
 const StyledScCard = styled.div`
+  transition: all 0.1s;
   max-width: ${({ width }) => (width || 40) + 'rem'};
   margin: 0 auto;
   padding: ${({ padding }) => padding || '2rem 3rem'};
-  box-shadow: ${({ shadow, theme }) => theme.shadow[shadow] || 'none'};
-  background-color: ${({ bgColor, theme, constants }) =>
-    constants.main[bgColor] || theme.palette.common.white};
+  box-shadow: ${({ shadow, theme }) => theme.shadow[shadow]};
+  background-color: ${({ bgColor, colorGrade }) => COLOR[colorGrade][bgColor]};
+  border: ${({ bColor, borderPx, colorGrade }) => {
+    if (bColor === 'none') {
+      return 'none';
+    } else {
+      return (borderPx || 1) + 'px solid ' + COLOR[colorGrade][bColor];
+    }
+  }};
   border-radius: ${({ bRadius }) => (bRadius || 4) + 'px'};
 `;
 
-export const ScCard = ({ width, padding, bgColor, bRadius, shadow, children }) => {
-  const themeContext = useContext(ThemeContext);
-
-  const COLOR_MAIN = {
-    primary: themeContext.palette.primary.dark,
-    secondary: themeContext.palette.secondary.main,
-    error: themeContext.palette.error.main,
-    text: themeContext.palette.text.primary,
-    textSecondary: themeContext.palette.text.secondary,
-    greyLight1: themeContext.color.grey.light1,
-    greyLight2: themeContext.color.grey.light2,
-    greyLight3: themeContext.color.grey.light3,
-  };
-
+export const ScCard = ({
+  width,
+  padding,
+  bgColor,
+  bColor,
+  borderPx,
+  colorGrade,
+  bRadius,
+  shadow,
+  children,
+}) => {
   return (
     <StyledScCard
-      constants={{ main: COLOR_MAIN }}
       width={width}
       padding={padding}
       shadow={shadow}
       bgColor={bgColor}
+      bColor={bColor}
+      borderPx={borderPx}
+      colorGrade={colorGrade}
       bRadius={bRadius}
     >
       {children}
@@ -40,11 +47,48 @@ export const ScCard = ({ width, padding, bgColor, bRadius, shadow, children }) =
   );
 };
 
+ScCard.defaultProps = {
+  shadow: 'none',
+  bgColor: 'white',
+  bColor: 'none',
+  colorGrade: 'main',
+};
+
 ScCard.propTypes = {
-  shadow: PropTypes.oneOf(['Xxs, Xs, Sm, Md, Lg, SmoothXs, SmoothSm, SmoothMd']),
-  bgColor: PropTypes.oneOf([
-    'primary, secondary, error, text, textSecondary, greyLight1, greyLight2, greyLight3',
+  shadow: PropTypes.oneOf([
+    'none',
+    'Xxs',
+    'Xs',
+    'Sm',
+    'Md',
+    'Lg',
+    'SmoothXs',
+    'SmoothSm',
+    'SmoothMd',
   ]),
+  colorGrade: PropTypes.oneOf(['main', 'light']),
+  bgColor: PropTypes.oneOf([
+    'transparent',
+    'white',
+    'primary',
+    'secondary',
+    'error',
+    'text',
+    'grey1',
+    'grey2',
+    'grey3',
+  ]),
+  bColor: PropTypes.oneOf([
+    'none',
+    'primary',
+    'secondary',
+    'error',
+    'text',
+    'grey1',
+    'grey2',
+    'grey3',
+  ]),
+  borderPx: PropTypes.number,
   width: PropTypes.number,
   bRadius: PropTypes.number,
 };

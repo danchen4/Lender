@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MySelectStates = ({ label, required, customStyle, name }) => {
+export const MySelectStates = ({ label, required, customStyle, name }) => {
   const classesMUI = useStyles(customStyle);
   const [fieldprops, meta] = useField(name);
   const errorText = meta.error && meta.touched && meta.error;

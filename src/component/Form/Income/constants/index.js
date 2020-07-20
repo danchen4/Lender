@@ -11,3 +11,28 @@ export const OTHER_INCOME_SELECT = [
   { id: 'disability', value: 'Disability' },
   { id: 'other', value: 'Other' },
 ];
+
+export const WEEKLY_PAYDATE_SELECT = [
+  { id: 'monday', value: 'Monday' },
+  { id: 'tuesday', value: 'Tuesday' },
+  { id: 'wednesday', value: 'Wednesday' },
+  { id: 'thursday', value: 'Thursday' },
+  { id: 'friday', value: 'Friday' },
+];
+
+export const MONTHLY_DATE_SELECT = [...Array(31).keys()].map((item) => ({
+  id: item++,
+  value: item++,
+}));
+
+export const SEMIMONTHLY_DATE1_SELECT = [...Array(15).keys()].map((item) => ({
+  id: item++,
+  value: item++,
+}));
+
+export const SEMIMONTHLY_DATE2_SELECT = [...Array(16).keys()].map((item) => ({
+  id: item++ + 15,
+  value: item++ + 15,
+}));
+
+export const NUMBER_MASK = [/(\d)(?=(\d{3})+(?!\d))/];

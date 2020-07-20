@@ -5,14 +5,14 @@ import styled from 'styled-components';
 const StyledScTextBox = styled.p`
   font-size: 1.4rem;
   line-height: 1.7;
-  padding: 1rem;
+  padding: ${({ padding }) => padding || '1rem'};
   color: ${({ secondary, theme }) => secondary && theme.palette.text.secondary};
   font-weight: ${({ weight }) => weight || 400};
 `;
 
-export const ScTextBox = ({ secondary, weight, children }) => {
+export const ScTextBox = ({ secondary, padding, weight, children }) => {
   return (
-    <StyledScTextBox secondary={secondary} weight={weight}>
+    <StyledScTextBox secondary={secondary} padding={padding} weight={weight}>
       {children}
     </StyledScTextBox>
   );
@@ -20,5 +20,6 @@ export const ScTextBox = ({ secondary, weight, children }) => {
 
 ScTextBox.propTypes = {
   secondary: PropTypes.bool,
+  padding: PropTypes.string,
   weight: PropTypes.number,
 };

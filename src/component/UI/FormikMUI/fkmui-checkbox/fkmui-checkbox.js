@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+// Material UI
 import { FormControl } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormHelperText from '@material-ui/core/FormHelperText';
-
+// Formik
 import { useField } from 'formik';
+// CSS
 import classModule from './fkmui-checkbox.module.css';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,8 +18,12 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     fontWeight: '600',
   },
+  labelRoot: {
+    alignItems: 'flex-start',
+  },
   label: {
     fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
+    padding: '4px 9px',
     [theme.breakpoints.down('sm')]: {
       fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
     },
@@ -41,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MySelect = ({ label, required, customStyle, name }) => {
+export const MyCheckBox = ({ label, required, customStyle, name }) => {
   const classesMUI = useStyles(customStyle);
   const [fieldprops, meta] = useField(name);
   const errorText = meta.error && meta.touched && meta.error;
@@ -61,7 +66,7 @@ const MySelect = ({ label, required, customStyle, name }) => {
           <FormControlLabel
             control={<Checkbox {...fieldprops} size="medium" />}
             label={label}
-            classes={{ label: classesMUI.label }}
+            classes={{ root: classesMUI.labelRoot, label: classesMUI.label }}
           />
         </FormGroup>
         <FormHelperText className={classesMUI.errorMessage}>{errorText}</FormHelperText>
@@ -70,9 +75,9 @@ const MySelect = ({ label, required, customStyle, name }) => {
   );
 };
 
-MySelect.propTypes = {
+MyCheckBox.propTypes = {
   label: PropTypes.string.isRequired,
   required: PropTypes.bool,
 };
 
-export default MySelect;
+export default MyCheckBox;

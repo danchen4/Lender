@@ -3,43 +3,15 @@ import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 // Material UI
-import { Button } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
-import { makeStyles } from '@material-ui/core/styles';
+import CancelIcon from '@material-ui/icons/Cancel';
 // Components
 import { AddEmployerIncomeForm } from './AddEmployerIncomeForm';
 import { AddOtherIncomeForm } from './AddOtherIncomeForm';
+import { Spacer, ScFlexBox, ScButton } from '../../../UI/Styled';
 // Misc.
 import setIncomeDataObject from '../helper/setIncomeDataUtility';
-import { Spacer } from '../../../UI/Styled/Spacer';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: '1rem',
-  },
-  spacer: {
-    margin: '24px 0',
-  },
-  flex: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  button: {
-    margin: '1rem',
-    backgroundColor: theme.palette.primary.dark,
-  },
-  button2: {
-    width: '35%',
-    fontSize: '14px',
-    backgroundColor: theme.palette.primary.dark,
-  },
-  valueDisplay: {
-    marginTop: '40px',
-    width: '500px',
-    margin: 'auto',
-    textAlign: 'left',
-  },
-}));
+import { FormikData } from '../../../../helper/FormikData';
 
 const validationSchema = Yup.object({
   incomeSource: Yup.string().required(),
@@ -104,7 +76,6 @@ const validationSchema = Yup.object({
 });
 
 export const EditIncomeSourceForm = ({ updateIncomeData, editIncomeData, values, index }) => {
-  const classes = useStyles();
   const [showForm, setShowForm] = useState(true);
 
   const initialValues = {
@@ -154,42 +125,47 @@ export const EditIncomeSourceForm = ({ updateIncomeData, editIncomeData, values,
             {values[index].source.value === 'Other' && <AddOtherIncomeForm {...props} />}
 
             <Spacer>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                className={classes.button}
-                onClick={(event) => {
-                  props.setFieldValue('incomeSource', '');
-                  editIncomeData(index, false);
-                }}
-              >
-                Cancel
-              </Button>
+              <ScFlexBox justify="space-evenly">
+                <ScButton
+                  variant="outlined"
+                  variantColor="error"
+                  width="35%"
+                  padding="1rem 2rem"
+                  onClick={(event) => {
+                    props.setFieldValue('incomeSource', '');
+                    editIncomeData(index, false);
+                  }}
+                >
+                  <span className="text">Cancel</span>
+                  <CancelIcon />
+                </ScButton>
 
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                type="submit"
-                startIcon={<SaveIcon />}
-                disabled={!props.dirty || !props.isValid || props.isSubmitting}
-              >
-                Save
-              </Button>
+                <ScButton
+                  variant="outlined"
+                  variantColor="primary"
+                  width="35%"
+                  padding="1rem 2rem"
+                  type="submit"
+                  disabled={!props.dirty || !props.isValid || props.isSubmitting}
+                >
+                  <span className="text">Save</span>
+                  <SaveIcon />
+                </ScButton>
+              </ScFlexBox>
             </Spacer>
 
-            <pre className={classes.valueDisplay}>{JSON.stringify(props.values, null, 4)}</pre>
-            <pre className={classes.valueDisplay}>{JSON.stringify(props.errors, null, 4)}</pre>
+            <FormikData
+              dirty={props.dirty}
+              isValid={props.isValid}
+              isSubmitting={props.isSubmitting}
+              values={props.values}
+              errors={props.errors}
+            />
           </Form>
         )}
       </Formik>
     );
   }
 
-  return (
-    <React.Fragment>
-      <div className={classes.root}>{form}</div>
-    </React.Fragment>
-  );
+  return <div style={{ padding: '1rem' }}>{form}</div>;
 };

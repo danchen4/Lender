@@ -1,13 +1,14 @@
-import 'date-fns';
 import React, { useState } from 'react';
 import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-
+import 'date-fns';
+// Formik
 import { useField } from 'formik';
+// Material UI
 import { makeStyles } from '@material-ui/core/styles';
-
-import classModule from './fkmui-calender.module.css';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { FormHelperText, Grid } from '@material-ui/core';
+// CSS
+import classModule from './fkmui-calender.module.css';
 
 const useStyles = makeStyles((theme) => ({
   datePicker: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyCalender = ({ label, required, customStyle, name }) => {
+export const MyCalender = ({ label, required, customStyle, name }) => {
   const classesMUI = useStyles(customStyle);
   const [fieldprops, meta, handler] = useField(name);
   const errorText = meta.error && meta.touched && meta.error;

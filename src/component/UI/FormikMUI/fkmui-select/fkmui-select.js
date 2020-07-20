@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// Material UI
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FormHelperText from '@material-ui/core/FormHelperText';
+// Formik
 import { useField } from 'formik';
+// CSS
 import classModule from './fkmui-select.module.css';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MySelect = ({ options, label, required, customStyle, name }) => {
+export const MySelect = ({ options, label, required, customStyle, name }) => {
   const classesMUI = useStyles(customStyle);
   const [fieldprops, meta] = useField(name);
   const errorText = meta.error && meta.touched && meta.error;

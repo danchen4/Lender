@@ -8,7 +8,6 @@ import * as actionAuth from '../../../store/actions/index';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 // Material UI
-import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';

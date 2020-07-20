@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 // Material UI
-import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -67,7 +66,7 @@ const SignIn = ({ pathNext, history }) => {
         }}
       >
         {({ values, errors, isSubmitting, dirty, isValid }) => (
-          <ScCard>
+          <ScCard shadow="SmoothXs">
             <ScHeader as="h2" fontSize={2.6} fontWeight={400} color="secondary" mBot={1} mTop={2}>
               Log In
             </ScHeader>

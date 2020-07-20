@@ -7,16 +7,15 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 // MaterialUI
 import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
 // Components
 import { AddEmployerIncomeForm } from './AddEmployerIncomeForm';
 import { AddOtherIncomeForm } from './AddOtherIncomeForm';
-import { SelectIncomeSource } from '../MUI/SelectIncomeSource';
-import { Spacer } from '../../../UI/Styled';
-import { ScButton } from '../../../UI/Styled';
+import { SelectIncomeSource } from '../components/SelectIncomeSource';
+import { Spacer, ScButton, ScFlexBox } from '../../../UI/Styled';
 // Misc.
 import setIncomeDataObject from '../helper/setIncomeDataUtility';
 import { FormikData } from '../../../../helper/FormikData';
-import { FlexBox } from '../../../UI/CustomUI/Flexbox/Flexbox';
 
 const validationSchema = Yup.object({
   incomeSource: Yup.string().required(),
@@ -134,11 +133,11 @@ export const AddIncomeSourceForm = ({ showForm, toggleForm }) => {
             {incomeType === 'Other' && <AddOtherIncomeForm {...props} />}
 
             <Spacer>
-              <FlexBox justify="space-evenly">
+              <ScFlexBox justify="space-evenly">
                 <ScButton
                   variant="outlined"
                   variantColor="error"
-                  width="45%"
+                  width="35%"
                   padding="1rem 2rem"
                   onClick={() => {
                     setIncomeType('');
@@ -146,22 +145,24 @@ export const AddIncomeSourceForm = ({ showForm, toggleForm }) => {
                     toggleForm();
                   }}
                 >
-                  Cancel
+                  <span className="text">Cancel</span>
+                  <CancelIcon />
                 </ScButton>
                 <ScButton
                   variant="outlined"
                   variantColor="primary"
-                  width="45%"
+                  width="35%"
                   padding="1rem 2rem"
                   type="submit"
                   disabled={!props.dirty || !props.isValid || props.isSubmitting}
                 >
-                  Save
+                  <span className="text">Save</span>
                   <SaveIcon />
                 </ScButton>
-              </FlexBox>
+              </ScFlexBox>
             </Spacer>
             <FormikData
+              show
               dirty={props.dirty}
               isValid={props.isValid}
               isSubmitting={props.isSubmitting}

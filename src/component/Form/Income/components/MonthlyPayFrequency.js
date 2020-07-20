@@ -1,7 +1,6 @@
 import React from 'react';
 import MySelect from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
-
-const MONTHLY_DATE_SELECT = [...Array(31).keys()].map((item) => ({ id: item++, value: item++ }));
+import { MONTHLY_DATE_SELECT } from '../constants';
 
 export const MonthlyPayFrequency = (props) => {
   return (

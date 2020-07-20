@@ -3,77 +3,20 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionApp from '../../../store/actions/index';
 // MaterialUI
-import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowLeftOutlinedIcon from '@material-ui/icons/KeyboardArrowLeftOutlined';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 // Components
 import { EditIncomeSourceForm } from './Forms/EditIncomeSourceForm';
 import { AddIncomeSourceForm } from './Forms/AddIncomeSourceForm';
-import { Spacer } from '../../UI/Styled/Spacer';
-import { FlexBox } from '../../UI/CustomUI/Flexbox/Flexbox';
-import { ScCard, ScHeader } from '../../UI/Styled';
-import { ScTextBox } from '../../UI/Styled/ScTextBox';
-import { ScButton } from '../../UI/Styled/ScButton';
+import { Spacer, ScCard, ScHeader, ScFlexBox, ScTextBox, ScButton } from '../../UI/Styled';
 // CSS
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import classModule from './Income.module.css';
-
-const useStyles = makeStyles((theme) => ({
-  box: {
-    padding: '0.5rem',
-  },
-  paper: {
-    maxWidth: '600px',
-    margin: 'auto',
-    borderRadius: '6px',
-    padding: theme.spacing(4),
-  },
-  card: {
-    boxShadow: '0 5px 10px -3px rgba(0, 0, 0, 0.1)',
-    maxWidth: '500px',
-    margin: '0 auto',
-  },
-  cardContent: {
-    padding: '0',
-  },
-  editIncome: {
-    padding: '1rem',
-  },
-  button: {
-    margin: '1rem',
-    backgroundColor: theme.palette.primary.dark,
-  },
-  button2: {
-    width: '35%',
-    fontSize: '14px',
-    backgroundColor: theme.palette.primary.dark,
-  },
-  textbutton1: {
-    color: theme.palette.text.secondary,
-    margin: '0 1rem',
-    fontSize: '14px',
-    padding: '1rem 4rem',
-  },
-  textbutton2: {
-    color: theme.palette.error.light,
-    margin: '0 1rem',
-    fontSize: '14px',
-    padding: '1rem 4rem',
-  },
-  valueDisplay: {
-    marginTop: '40px',
-    width: '500px',
-    margin: 'auto',
-    textAlign: 'left',
-  },
-}));
+// Misc.
+import { CARD_FORMAT_2 } from '../../../constants';
+import { IncomeSource } from './components/IncomeSource';
 
 const FormEmployer = ({ pathNext, pathPrev, history }) => {
-  const classes = useStyles();
   const [showForm, setShowForm] = useState(false);
 
   const incomeDataREDUX = useSelector((state) => state.application.incomeData);
@@ -110,7 +53,7 @@ const FormEmployer = ({ pathNext, pathPrev, history }) => {
   console.log('incomeDataREDUX', incomeDataREDUX);
 
   return (
-    <div className={classes.root}>
+    <>
       <ScCard width={50} shadow="SmoothXs">
         <ScHeader as="h2" fontSize={3} fontWeight={500} color="secondary" mBot={1} mTop={2}>
           Source of Income
@@ -133,64 +76,40 @@ const FormEmployer = ({ pathNext, pathPrev, history }) => {
                 }}
               >
                 <Spacer>
-                  <ScCard width={50} shadow="none" bgColor="greyLight1">
-                    <div>
-                      <ScHeader
-                        as="h5"
-                        fontSize={1.6}
-                        fontWeight={500}
-                        color="secondary"
-                        mBot={1}
-                        mTop={1}
-                      >
-                        Income Source {index + 1}:
-                        <span className={classModule.Darken}>
-                          {incomeSource.employerData.employerName.value ||
-                            incomeSource.otherIncomeName.value}
-                        </span>
-                      </ScHeader>
-                    </div>
-                    <div className={classModule.CardBody}>
-                      <div className={classModule.CardSection}>
-                        <div className={classModule.CardSectionHeader}>Gross Income:</div>
-                        <div className={classModule.CardSectionData}>
-                          {incomeSource.incomeData.grossIncome.value}
-                        </div>
-                      </div>
-                      <div className={classModule.CardSection}>
-                        <div className={classModule.CardSectionHeader}>Pay Frequency:</div>
-                        <div className={classModule.CardSectionData}>
-                          {incomeSource.incomeData.payFrequency.value}
-                        </div>
-                      </div>
-                    </div>
-
-                    {incomeSource.edit && (
-                      <EditIncomeSourceForm
-                        className={classes.editIncome}
-                        updateIncomeData={onUdpateIncomeArray}
-                        values={incomeDataREDUX}
-                        index={index}
-                        editIncomeData={onEditIncomeArray}
-                      />
-                    )}
-
-                    <FlexBox justify="space-between">
-                      <ScButton
-                        variant="text"
-                        variantColor="primary"
-                        onClick={() => onEditIncomeArray(index, true)}
-                      >
-                        Edit
-                      </ScButton>
-                      <ScButton
-                        variant="text"
-                        variantColor="error"
-                        onClick={(index) => onDeleteIncomeArray(index)}
-                      >
-                        Delete
-                      </ScButton>
-                    </FlexBox>
+                  <ScCard {...CARD_FORMAT_2(incomeSource)}>
+                    <IncomeSource incomeSource={incomeSource} index={index} />
+                    <Spacer mBot={0.1}>
+                      {incomeSource.edit && (
+                        <EditIncomeSourceForm
+                          updateIncomeData={onUdpateIncomeArray}
+                          values={incomeDataREDUX}
+                          index={index}
+                          editIncomeData={onEditIncomeArray}
+                        />
+                      )}
+                      {!incomeSource.edit && (
+                        <ScFlexBox justify="space-evenly">
+                          <ScButton
+                            variant="outlined"
+                            variantColor="error"
+                            padding="0.5rem"
+                            width="30%"
+                            onClick={(index) => onDeleteIncomeArray(index)}
+                          >
+                            Delete
+                          </ScButton>
+                          <ScButton
+                            variant="outlined"
+                            variantColor="grey1"
+                            padding="0.5rem"
+                            width="30%"
+                            onClick={() => onEditIncomeArray(index, true)}
+                          >
+                            Edit
+                          </ScButton>
+                        </ScFlexBox>
+                      )}
+                    </Spacer>
                   </ScCard>
                 </Spacer>
               </CSSTransition>
@@ -207,7 +126,7 @@ const FormEmployer = ({ pathNext, pathPrev, history }) => {
         {showForm && <AddIncomeSourceForm showForm={showForm} toggleForm={toggleFormHandler} />}
 
         <Spacer mTop={5}>
-          <FlexBox justify="space-between">
+          <ScFlexBox justify="space-between">
             <ScButton variant="secondary" width="45%" onClick={prevStep}>
               <KeyboardArrowLeftOutlinedIcon />
               Back
@@ -222,10 +141,10 @@ const FormEmployer = ({ pathNext, pathPrev, history }) => {
               Next Step
               <KeyboardArrowRightIcon />
             </ScButton>
-          </FlexBox>
+          </ScFlexBox>
         </Spacer>
       </ScCard>
-    </div>
+    </>
   );
 };
 

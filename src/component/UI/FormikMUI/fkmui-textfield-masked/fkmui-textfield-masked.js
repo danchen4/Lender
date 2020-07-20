@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
       fontSize: (customStyle) => (parseInt(customStyle.fontSize * 0.7) || 1.2) + 'rem',
     },
   },
+  error: {
+    color: `${theme.palette.error.main} !important`,
+  },
   input: {
     fontSize: (customStyle) => (customStyle.fontSize || 1.6) + 'rem',
     [theme.breakpoints.down('sm')]: {
@@ -46,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyMaskedTextField = ({
+export const MyMaskedTextField = ({
   label,
   required,
   maskInput,
@@ -90,7 +93,15 @@ const MyMaskedTextField = ({
         variant="outlined"
         required={required}
       >
-        <InputLabel className={classesMUI.label}>{label}</InputLabel>
+        <InputLabel
+          className={
+            meta.error && meta.touched
+              ? `${classesMUI.label} ${classesMUI.error}`
+              : classesMUI.label
+          }
+        >
+          {label}
+        </InputLabel>
         <OutlinedInput
           {...fieldprops}
           label={label}

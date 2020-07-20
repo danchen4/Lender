@@ -3,51 +3,27 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionApp from '../../../store/actions/index';
 // Material UI
-import { Button, Typography, Paper, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { purple } from '@material-ui/core/colors';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Grid from '@material-ui/core/Grid';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import KeyboardArrowLeftOutlinedIcon from '@material-ui/icons/KeyboardArrowLeftOutlined';
 // CSS
 import classModule from './Confirm.module.css';
 // Components
-import { Spacer } from '../../UI/Styled/Spacer';
+import {
+  Spacer,
+  ScFlexBox,
+  ScCard,
+  ScHeader,
+  ScTextBox,
+  ScFlexItem,
+  ScButton,
+} from '../../UI/Styled';
+import { HEADER_FORMAT_1, CARD_FORMAT_1, CARD_FORMAT_2 } from '../../../constants';
+import { IncomeSource } from '../Income/components/IncomeSource';
 
 const useStyles = makeStyles((theme) => ({
-  header1: {
-    padding: '1rem 0',
-  },
-  header2: {
-    padding: '1rem 0',
-  },
-  box: {
-    padding: '0.5rem',
-  },
-  paper: {
-    maxWidth: '600px',
-    margin: 'auto',
-    borderRadius: '6px',
-    padding: theme.spacing(2),
-  },
-  card: {
-    boxShadow: '0 5px 10px -3px rgba(0, 0, 0, 0.1)',
-    maxWidth: '500px',
-    margin: '0 auto',
-  },
-  cardContent: {
-    padding: '0',
-    '&:last-child': {
-      paddingBottom: 8,
-    },
-  },
-  button: {
-    margin: '1rem',
-    backgroundColor: theme.palette.primary.dark,
-  },
   buttonProgress: {
-    color: purple[200],
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -128,84 +104,60 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
   }
 
   return (
-    <div className={classes.root}>
-      <Box component="div" className={classes.box}>
-        <Paper className={classes.paper} elevation={2}>
-          <Spacer margin={3}>
-            <Typography variant="h2" color="secondary">
-              Confirm Your Information
-            </Typography>
-          </Spacer>
-          <Card variant="outlined" className={classes.card}>
-            <CardContent className={classes.cardContent}>
-              <div className={classModule.CardHeader}>
-                <Typography variant="h5">Personal Information</Typography>
-              </div>
-              <div className={classModule.CardList}>
-                <Grid container spacing={4}>
-                  {userValueArray.map((item) => {
-                    return (
-                      <Grid item xs={12} sm={6} key={item.id}>
-                        <div className={classModule.CardSection}>
-                          <div className={classModule.CardSectionHeader}>{item.label}</div>
-                          <div className={classModule.CardSectionData}>{item.value}</div>
-                        </div>
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-              </div>
-            </CardContent>
-          </Card>
-          <Spacer>
-            {incomeDataREDUX.map((incomeSource, index) => {
+    <>
+      <ScCard width={50} shadow="SmoothXs">
+        <ScHeader as="h2" fontSize={3} fontWeight={500} color="secondary" mBot={1} mTop={2}>
+          Confirm Your Information
+        </ScHeader>
+        <ScTextBox>Review your information before submitting.</ScTextBox>
+        <ScHeader as="h3" fontSize={1.8} fontWeight={500} color="text" mTop={2} mBot={1}>
+          Personal Information
+        </ScHeader>
+        <ScCard {...CARD_FORMAT_1}>
+          <ScFlexBox justify="flex-start">
+            {userValueArray.map((item) => {
               return (
-                <Spacer key={index}>
-                  <Card variant="outlined" className={classes.card}>
-                    <CardContent className={classes.cardContent}>
-                      <div className={classModule.CardHeader}>
-                        <Typography variant="h6" className={classes.header2}>
-                          Income Source:{' '}
-                          <span className={classModule.Darken}>
-                            {incomeSource.employerData.employerName.value ||
-                              incomeSource.otherIncomeName.value}
-                          </span>
-                        </Typography>
-                      </div>
-                      <div className={classModule.CardBody}>
-                        <div className={classModule.CardSection}>
-                          <div className={classModule.CardSectionHeader}>Gross Income:</div>
-                          <div>{incomeSource.incomeData.grossIncome.value}</div>
-                        </div>
-                        <div className={classModule.CardSection}>
-                          <div className={classModule.CardSectionHeader}>Pay Frequency:</div>
-                          <div>{incomeSource.incomeData.payFrequency.value}</div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Spacer>
+                <ScFlexItem basis="50%" key={item.label}>
+                  <ScHeader as="h4" {...HEADER_FORMAT_1}>
+                    {item.label}
+                  </ScHeader>
+                  <ScTextBox padding="0.3rem">{item.value}</ScTextBox>
+                </ScFlexItem>
               );
             })}
+          </ScFlexBox>
+        </ScCard>
+        <ScHeader as="h3" fontSize={1.8} fontWeight={500} color="text" mTop={2} mBot={1}>
+          Income Sources
+        </ScHeader>
+        {incomeDataREDUX.map((incomeSource, index) => (
+          <Spacer key={index}>
+            <ScCard {...CARD_FORMAT_2(incomeSource)}>
+              <IncomeSource incomeSource={incomeSource} index={index} />
+            </ScCard>
           </Spacer>
-        </Paper>
-      </Box>
-      <br />
-      <br />
-      <Button
-        className={classes.button}
-        variant="contained"
-        color="secondary"
-        size="large"
-        onClick={prevStep}
-      >
-        Back
-      </Button>
-      <Button variant="contained" color="secondary" size="large" onClick={submitApplicationHandler}>
-        Confirm
-      </Button>
-      {loadingREDUX && <CircularProgress size={24} className={classes.buttonProgress} />}
-    </div>
+        ))}
+
+        <Spacer mTop={5}>
+          <ScFlexBox justify="space-between">
+            <ScButton variant="secondary" width="45%" onClick={prevStep}>
+              <KeyboardArrowLeftOutlinedIcon />
+              Back
+            </ScButton>
+            <ScButton
+              variant="secondary"
+              width="45%"
+              type="submit"
+              onClick={submitApplicationHandler}
+            >
+              Confirm
+              <KeyboardArrowRightIcon />
+              {loadingREDUX && <CircularProgress size={24} className={classes.buttonProgress} />}
+            </ScButton>
+          </ScFlexBox>
+        </Spacer>
+      </ScCard>
+    </>
   );
 };
 

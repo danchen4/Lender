@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionApp from '../../../store/actions';
 // MaterialUi
-import { Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 // Formik/Yup
@@ -12,12 +11,8 @@ import * as Yup from 'yup';
 // Components
 import { MyTextField } from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import MyMaskedTextField from '../../UI/FormikMUI/fkmui-textfield-masked/fkmui-textfield-masked';
-import { Spacer } from '../../UI/Styled/Spacer';
-import { FlexBox } from '../../UI/CustomUI/Flexbox/Flexbox';
+import { Spacer, ScFlexBox, ScCard, ScHeader, ScTextBox, ScButton } from '../../UI/Styled';
 import MySelectStates from '../../UI/FormikMUI/fkmui-select-states/fkmui-select-states';
-import { ScCard, ScHeader } from '../../UI/Styled';
-import { ScTextBox } from '../../UI/Styled/ScTextBox';
-import { ScButton } from '../../UI/Styled/ScButton';
 // Misc.
 import { FormikData } from '../../../helper/FormikData';
 
@@ -164,10 +159,10 @@ const FormUserName = ({ pathNext, history }) => {
                 <MyTextField name="city" label="City" required customStyle={{ width: 100 }} />
               </Spacer>
               <Spacer>
-                <FlexBox justify="space-between">
+                <ScFlexBox justify="space-between">
                   <MySelectStates name="state" label="State" required customStyle={{ width: 45 }} />
                   <MyTextField name="zip" label="ZIP Code" required customStyle={{ width: 45 }} />
-                </FlexBox>
+                </ScFlexBox>
               </Spacer>
               <Spacer>
                 <MyMaskedTextField

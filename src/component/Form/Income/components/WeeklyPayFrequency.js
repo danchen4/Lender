@@ -1,13 +1,6 @@
 import React from 'react';
 import MySelect from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
-
-const WEEKLY_PAYDATE_SELECT = [
-  { id: 'monday', value: 'Monday' },
-  { id: 'tuesday', value: 'Tuesday' },
-  { id: 'wednesday', value: 'Wednesday' },
-  { id: 'thursday', value: 'Thursday' },
-  { id: 'friday', value: 'Friday' },
-];
+import { WEEKLY_PAYDATE_SELECT } from '../constants';
 
 export const WeeklyPayFrequency = () => {
   return (

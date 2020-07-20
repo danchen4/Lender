@@ -1,2 +1,2 @@
 export { MUITheme } from './MUITheme';
-export { SCTheme } from './SCTheme';
+export { SCTheme, COLOR } from './SCTheme';

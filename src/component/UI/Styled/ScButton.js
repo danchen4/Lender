@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import styled, { css, ThemeContext } from 'styled-components';
+import styled, { css } from 'styled-components';
+import { COLOR } from '../../../theme';
 
 const StyledScButton = styled.button`
   width: ${({ width }) => width || '100%'};
@@ -13,6 +14,13 @@ const StyledScButton = styled.button`
   border: none;
   cursor: pointer;
   transition: all 0.1s;
+
+  .text {
+    margin-right: 0.5rem;
+  }
+
+  .icon {
+  }
 
   &:enabled {
     transition: all 0.3s;
@@ -67,14 +75,15 @@ const StyledScButton = styled.button`
     }
     if (variant === 'outlined') {
       return css`
-        color: ${({ variantColor, constants }) => constants.main[variantColor]};
-        border: 2px solid ${({ variantColor, constants }) => constants.main[variantColor]};
+        color: ${({ variantColor }) => COLOR.main[variantColor]};
+        border: 2px solid ${({ variantColor }) => COLOR.main[variantColor]};
         background-color: ${({ theme }) => theme.palette.common.white};
 
         &:hover {
           color: ${({ theme }) => theme.palette.common.white};
-          background-color: ${({ variantColor, constants }) => constants.light[variantColor]};
-          border: 2px solid ${({ variantColor, constants }) => constants.main[variantColor]};
+          background-color: ${({ variantColor }) => COLOR.main[variantColor]};
+          border: 2px solid ${({ variantColor }) => COLOR.main[variantColor]};
+          transform: none;
         }
 
         &:disabled:hover {
@@ -84,10 +93,10 @@ const StyledScButton = styled.button`
     }
     if (variant === 'text') {
       return css`
-        color: ${({ variantColor, constants }) => constants.main[variantColor]};
+        color: ${({ variantColor }) => COLOR.main[variantColor]};
 
         &:hover {
-          color: ${({ variantColor, constants }) => constants.light[variantColor]};
+          color: ${({ variantColor }) => COLOR.light[variantColor]};
           background-color: transparent;
           box-shadow: none;
           transform: none;
@@ -125,25 +134,8 @@ export const ScButton = ({
   onClick,
   children,
 }) => {
-  const themeContext = useContext(ThemeContext);
-  const COLOR_MAIN = {
-    primary: themeContext.palette.primary.dark,
-    secondary: themeContext.palette.secondary.main,
-    error: themeContext.palette.error.main,
-    text: themeContext.palette.text.primary,
-    textSecondary: themeContext.palette.text.secondary,
-  };
-  const COLOR_LIGHT = {
-    primary: themeContext.palette.primary.main,
-    secondary: themeContext.palette.secondary.light,
-    error: themeContext.palette.error.light,
-    text: themeContext.palette.text.disabled,
-    textSecondary: themeContext.palette.text.primary,
-  };
-
   return (
     <StyledScButton
-      constants={{ main: COLOR_MAIN, light: COLOR_LIGHT }}
       variant={variant}
       type={type}
       disabled={disabled}
@@ -159,12 +151,20 @@ export const ScButton = ({
 };
 
 ScButton.propTypes = {
-  variant: PropTypes.oneOf(['primary, secondary, outlined, text']),
+  variant: PropTypes.oneOf(['primary', 'secondary', 'outlined', 'text']),
   width: PropTypes.string,
   padding: PropTypes.string,
   fontSize: PropTypes.number,
   type: PropTypes.string,
   disabled: PropTypes.bool,
-  variantColor: PropTypes.oneOf(['primary, secondary, error, text, textSecondary']),
+  variantColor: PropTypes.oneOf([
+    'primary',
+    'secondary',
+    'error',
+    'text',
+    'grey1',
+    'grey2',
+    'grey3',
+  ]),
   onClick: PropTypes.func,
 };

@@ -2,16 +2,18 @@ import React from 'react';
 // Material UI
 import { MyTextField } from '../../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import { Typography } from '@material-ui/core';
-import { Spacer } from '../../../UI/Styled/Spacer';
-import { FlexBox } from '../../../UI/CustomUI/Flexbox/Flexbox';
+import { Spacer, ScFlexBox } from '../../../UI/Styled';
 // Components
-import MySelectStates from '../../../UI/FormikMUI/fkmui-select-states/fkmui-select-states';
-import MySelect from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
-import { WeeklyPayFrequency } from '../MUI/WeeklyPayFrequency';
-import { BiweeklyPayFrequency } from '../MUI/BiweeklyPayFrequency';
-import { SemiMonthlyPayFrequency } from '../MUI/SemiMonthlyPayFrequency';
-import { MonthlyPayFrequency } from '../MUI/MonthlyPayFrequency';
+import { MySelectStates } from '../../../UI/FormikMUI/fkmui-select-states/fkmui-select-states';
+import { MySelect } from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
+import {
+  WeeklyPayFrequency,
+  BiweeklyPayFrequency,
+  SemiMonthlyPayFrequency,
+  MonthlyPayFrequency,
+} from '../components';
 import { ScTextBox } from '../../../UI/Styled/ScTextBox';
+import { MyMaskedTextFieldCurrency } from '../../../UI/FormikMUI/fkmui-textfield-masked-currency/fkmui-textfield-masked-currency';
 // Misc.
 import { PAY_FREQUENCY_SELECT } from '../constants';
 
@@ -42,10 +44,10 @@ export const AddEmployerIncomeForm = (props) => {
         <MyTextField name="city" label="City" required customStyle={{ width: 100 }} />
       </Spacer>
       <Spacer>
-        <FlexBox justify="space-between">
+        <ScFlexBox justify="space-between">
           <MySelectStates name="state" label="State" required customStyle={{ width: 45 }} />
           <MyTextField name="zip" label="ZIP Code" required customStyle={{ width: 45 }} />
-        </FlexBox>
+        </ScFlexBox>
       </Spacer>
 
       <Typography variant="h4" color="secondary">
@@ -54,7 +56,7 @@ export const AddEmployerIncomeForm = (props) => {
       <ScTextBox>Let us know when you get paid and the gross amount per pay check</ScTextBox>
 
       <Spacer>
-        <FlexBox justify="space-between">
+        <ScFlexBox justify="space-between">
           <MySelect
             name="payFrequency"
             label="Pay Frequency"
@@ -68,7 +70,22 @@ export const AddEmployerIncomeForm = (props) => {
             required
             customStyle={{ width: 45 }}
           />
-        </FlexBox>
+
+          <MyMaskedTextFieldCurrency
+            name="grossIncome"
+            label="Gross Income"
+            required
+            customStyle={{ width: 45 }}
+          />
+          {/* <MyMaskedTextField
+            name="grossIncome"
+            label="Gross Income"
+            maskInput={NUMBER_MASK}
+            delimiter=","
+            required
+            customStyle={{ width: 45 }}
+          /> */}
+        </ScFlexBox>
       </Spacer>
 
       {props.values.payFrequency === 'Weekly' ? <WeeklyPayFrequency {...props} /> : null}
