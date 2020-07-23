@@ -22,9 +22,9 @@ export const SCTheme = {
       light1: '#f9f9f9',
       light2: '#eeeeee',
       light3: '#cccccc',
-      dark1: '#777',
-      dark2: '#999',
-      dark3: '#333',
+      dark1: '#868686',
+      dark2: '#686868',
+      dark3: '#424242',
     },
   },
   shadow: {
@@ -47,10 +47,11 @@ export const SCTheme = {
 
 export const COLOR = {
   main: {
-    primary: SCTheme.palette.primary.dark,
+    primary: SCTheme.palette.primary.main,
     secondary: SCTheme.palette.secondary.main,
     error: SCTheme.palette.error.main,
     text: SCTheme.palette.text.primary,
+    disabled: SCTheme.palette.text.disabled,
     grey1: SCTheme.color.grey.dark1,
     grey2: SCTheme.color.grey.dark2,
     grey3: SCTheme.color.grey.dark3,
@@ -60,9 +61,10 @@ export const COLOR = {
   },
   light: {
     primary: SCTheme.palette.primary.light,
-    secondary: SCTheme.palette.secondary.main,
-    error: SCTheme.palette.error.main,
+    secondary: SCTheme.palette.secondary.light,
+    error: SCTheme.palette.error.light,
     text: SCTheme.palette.text.secondary,
+    disabled: SCTheme.palette.text.disabled,
     grey1: SCTheme.color.grey.light1,
     grey2: SCTheme.color.grey.light2,
     grey3: SCTheme.color.grey.light3,

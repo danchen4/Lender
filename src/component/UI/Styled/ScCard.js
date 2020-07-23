@@ -6,18 +6,22 @@ import { COLOR } from '../../../theme';
 const StyledScCard = styled.div`
   transition: all 0.1s;
   max-width: ${({ width }) => (width || 40) + 'rem'};
+  width: 100%;
   margin: 0 auto;
   padding: ${({ padding }) => padding || '2rem 3rem'};
   box-shadow: ${({ shadow, theme }) => theme.shadow[shadow]};
-  background-color: ${({ bgColor, colorGrade }) => COLOR[colorGrade][bgColor]};
+  background-color: ${({ bgColor, colorGrade }) => COLOR[colorGrade || 'main'][bgColor]};
   border: ${({ bColor, borderPx, colorGrade }) => {
     if (bColor === 'none') {
       return 'none';
     } else {
-      return (borderPx || 1) + 'px solid ' + COLOR[colorGrade][bColor];
+      return (borderPx || 1) + 'px solid ' + COLOR[colorGrade || 'main'][bColor];
     }
   }};
   border-radius: ${({ bRadius }) => (bRadius || 4) + 'px'};
+  @media ${({ theme }) => theme.bp.phone} {
+    padding: 2rem 1rem;
+  }
 `;
 
 export const ScCard = ({

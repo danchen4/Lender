@@ -4,14 +4,14 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
+// Redux
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-
 import applicationReducer from './store/reducers/application';
 import authReducer from './store/reducers/auth';
 import userApplicationsReducer from './store/reducers/userApplications';
-
+// Theme
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
 import { ThemeProvider } from 'styled-components';

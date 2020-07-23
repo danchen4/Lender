@@ -1,8 +1,6 @@
 import React from 'react';
-// Material UI
-import { MyTextField } from '../../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 // Components
-import { MySelect } from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
+import { MySelect, MyMaskedTextFieldCurrency } from '../../../UI/FormikMUI';
 import {
   WeeklyPayFrequency,
   BiweeklyPayFrequency,
@@ -11,8 +9,7 @@ import {
 } from '../components';
 import { Spacer, ScTextBox, ScHeader, ScFlexBox } from '../../../UI/Styled';
 // Misc.
-import { PAY_FREQUENCY_SELECT, OTHER_INCOME_SELECT } from '../constants';
-import MyMaskedTextFieldCurrency from '../../../UI/FormikMUI/fkmui-textfield-masked-currency/fkmui-textfield-masked-currency';
+import { PAY_FREQUENCY_SELECT, OTHER_INCOME_SELECT } from '../../../../constants';
 
 export const AddOtherIncomeForm = (props) => {
   return (
@@ -40,12 +37,6 @@ export const AddOtherIncomeForm = (props) => {
             required
             customStyle={{ width: 45 }}
           />
-          {/* <MyTextField
-            name="grossIncome"
-            label="Gross Income"
-            required
-            customStyle={{ width: 45 }}
-          /> */}
           <MyMaskedTextFieldCurrency
             name="grossIncome"
             label="Gross Income"

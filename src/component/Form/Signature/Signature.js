@@ -8,10 +8,10 @@ import * as Yup from 'yup';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowLeftOutlinedIcon from '@material-ui/icons/KeyboardArrowLeftOutlined';
 // Components
-import { MyTextField } from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
-import { MyCheckBox } from '../../UI/FormikMUI/fkmui-checkbox/fkmui-checkbox';
+import { MyTextField, MyCheckBox } from '../../UI/FormikMUI';
 import { FormikData } from '../../../helper/FormikData';
 import { Spacer, ScFlexBox, ScCard, ScHeader, ScTextBox, ScButton } from '../../UI/Styled';
+import { ProgressBar } from '../../ProgressBar/ProgressBar';
 
 const initialValues = {
   agreeCertify: false,
@@ -39,7 +39,6 @@ const FormUserName = ({ pathNext, pathPrev, history }) => {
     firstName = personalDataREDUX.firstName.value;
     lastName = personalDataREDUX.lastName.value;
   }
-  console.log({ firstName, lastName });
 
   const validationSchema = Yup.object({
     agreeCertify: Yup.boolean().oneOf([true], 'Must accept Terms and Conditions').required(),
@@ -54,7 +53,6 @@ const FormUserName = ({ pathNext, pathPrev, history }) => {
   });
 
   const nextStep = () => {
-    console.log('<FormSignature /> next steps');
     history.push({ pathname: pathNext });
   };
 
@@ -69,6 +67,7 @@ const FormUserName = ({ pathNext, pathPrev, history }) => {
 
   return (
     <>
+      <ProgressBar />
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -79,7 +78,7 @@ const FormUserName = ({ pathNext, pathPrev, history }) => {
         {({ values, errors, isSubmitting, dirty, isValid }) => (
           <ScCard width={50} shadow="SmoothXs">
             <Spacer margin={3}>
-              <ScHeader as="h2" fontSize={3} fontWeight={500} color="secondary" mBot={1} mTop={2}>
+              <ScHeader as="h2" fontSize={3} fontWeight={500} color="secondary" mBot={1} mTop={1}>
                 Signature
               </ScHeader>
               <ScTextBox>

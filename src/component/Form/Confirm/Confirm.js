@@ -7,8 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowLeftOutlinedIcon from '@material-ui/icons/KeyboardArrowLeftOutlined';
-// CSS
-import classModule from './Confirm.module.css';
 // Components
 import {
   Spacer,
@@ -19,8 +17,11 @@ import {
   ScFlexItem,
   ScButton,
 } from '../../UI/Styled';
-import { HEADER_FORMAT_1, CARD_FORMAT_1, CARD_FORMAT_2 } from '../../../constants';
 import { IncomeSource } from '../Income/components/IncomeSource';
+// Misc.
+import { formatPhoneNumber } from '../../../helper';
+import { HEADER_FORMAT_1, CARD_FORMAT_1, CARD_FORMAT_2 } from '../../../constants';
+import { ProgressBar } from '../../ProgressBar/ProgressBar';
 
 const useStyles = makeStyles((theme) => ({
   buttonProgress: {
@@ -37,7 +38,6 @@ const appDateFormatted = `${appDate.getMonth() + 1}/${appDate.getDate()}/${appDa
 const appNumber = Math.round(Math.random() * 500000);
 
 const FormConfirm = ({ pathNext, pathPrev, history }) => {
-  console.log('<Confirm /> RENDER');
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -52,7 +52,6 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
   const onClearApplicationData = () => dispatch(actionApp.clearApplicationData());
 
   const nextStep = () => {
-    console.log('<Confirm /> next step');
     history.push({ pathname: pathNext });
   };
 
@@ -60,12 +59,11 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
     history.push({ pathname: pathPrev });
   };
 
-  const sessionPersonalData = sessionStorage.getItem('sessionPersonalData');
-  const parsedPersonalData = JSON.parse(sessionPersonalData);
-  const sessionIncomeData = sessionStorage.getItem('sessionIncomeData');
-  const parsedIncomeData = JSON.parse(sessionIncomeData);
-
   useEffect(() => {
+    const sessionPersonalData = sessionStorage.getItem('sessionPersonalData');
+    const parsedPersonalData = JSON.parse(sessionPersonalData);
+    const sessionIncomeData = sessionStorage.getItem('sessionIncomeData');
+    const parsedIncomeData = JSON.parse(sessionIncomeData);
     // if session storage has data and Redux state is empty (meaning browser was refreshed), retore Redux state with session data
     if (parsedPersonalData && !personalDataREDUX.phone.value) {
       dispatch(actionApp.setPersonalData(parsedPersonalData));
@@ -82,8 +80,6 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
     appDate: appDateFormatted,
     appNumber: appNumber,
   };
-
-  console.log(applicationData);
 
   const submitApplicationHandler = () => {
     onSubmitApplication(tokenREDUX, applicationData);
@@ -105,56 +101,63 @@ const FormConfirm = ({ pathNext, pathPrev, history }) => {
 
   return (
     <>
+      <ProgressBar />
       <ScCard width={50} shadow="SmoothXs">
-        <ScHeader as="h2" fontSize={3} fontWeight={500} color="secondary" mBot={1} mTop={2}>
-          Confirm Your Information
-        </ScHeader>
-        <ScTextBox>Review your information before submitting.</ScTextBox>
-        <ScHeader as="h3" fontSize={1.8} fontWeight={500} color="text" mTop={2} mBot={1}>
-          Personal Information
-        </ScHeader>
-        <ScCard {...CARD_FORMAT_1}>
-          <ScFlexBox justify="flex-start">
-            {userValueArray.map((item) => {
-              return (
-                <ScFlexItem basis="50%" key={item.label}>
-                  <ScHeader as="h4" {...HEADER_FORMAT_1}>
-                    {item.label}
-                  </ScHeader>
-                  <ScTextBox padding="0.3rem">{item.value}</ScTextBox>
-                </ScFlexItem>
-              );
-            })}
-          </ScFlexBox>
-        </ScCard>
-        <ScHeader as="h3" fontSize={1.8} fontWeight={500} color="text" mTop={2} mBot={1}>
-          Income Sources
-        </ScHeader>
-        {incomeDataREDUX.map((incomeSource, index) => (
-          <Spacer key={index}>
-            <ScCard {...CARD_FORMAT_2(incomeSource)}>
-              <IncomeSource incomeSource={incomeSource} index={index} />
-            </ScCard>
-          </Spacer>
-        ))}
+        <Spacer>
+          <ScHeader as="h2" fontSize={3} fontWeight={500} color="secondary" mBot={1} mTop={1}>
+            Confirm Your Information
+          </ScHeader>
+          <ScTextBox>Review your information before submitting.</ScTextBox>
+          <ScHeader as="h3" fontSize={1.8} fontWeight={500} color="grey3" mTop={2} mBot={1}>
+            Personal Information
+          </ScHeader>
+          <ScCard {...CARD_FORMAT_1}>
+            <ScFlexBox justify="flex-start">
+              {userValueArray.map((item) => {
+                return (
+                  <ScFlexItem basis="50%" key={item.label}>
+                    <ScHeader as="h4" {...HEADER_FORMAT_1}>
+                      {item.label}
+                    </ScHeader>
+                    <ScTextBox padding="0.3rem">
+                      {item.label === 'Phone Number' ? formatPhoneNumber(item.value) : item.value}
+                    </ScTextBox>
+                  </ScFlexItem>
+                );
+              })}
+            </ScFlexBox>
+          </ScCard>
+        </Spacer>
+        <Spacer>
+          <ScHeader as="h3" fontSize={1.8} fontWeight={500} color="grey3" mTop={2} mBot={1}>
+            Income Sources
+          </ScHeader>
+          {incomeDataREDUX.map((incomeSource, index) => (
+            <Spacer key={index} mTop={0.1} mBot={2}>
+              <ScCard {...CARD_FORMAT_2(incomeSource)}>
+                <IncomeSource incomeSource={incomeSource} index={index} />
+              </ScCard>
+            </Spacer>
+          ))}
 
-        <Spacer mTop={5}>
-          <ScFlexBox justify="space-between">
-            <ScButton variant="secondary" width="45%" onClick={prevStep}>
-              <KeyboardArrowLeftOutlinedIcon />
-              Back
-            </ScButton>
-            <ScButton
-              variant="secondary"
-              width="45%"
-              type="submit"
-              onClick={submitApplicationHandler}
-            >
-              Confirm
-              <KeyboardArrowRightIcon />
-              {loadingREDUX && <CircularProgress size={24} className={classes.buttonProgress} />}
-            </ScButton>
-          </ScFlexBox>
+          <Spacer mTop={5}>
+            <ScFlexBox justify="space-between">
+              <ScButton variant="secondary" width="45%" onClick={prevStep}>
+                <KeyboardArrowLeftOutlinedIcon />
+                Back
+              </ScButton>
+              <ScButton
+                variant="secondary"
+                width="45%"
+                type="submit"
+                onClick={submitApplicationHandler}
+              >
+                Confirm
+                <KeyboardArrowRightIcon />
+                {loadingREDUX && <CircularProgress size={24} className={classes.buttonProgress} />}
+              </ScButton>
+            </ScFlexBox>
+          </Spacer>
         </Spacer>
       </ScCard>
     </>

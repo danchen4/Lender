@@ -69,18 +69,17 @@ export const loginAccount = (formikValues, formikActions, isSignUp, redirect, hi
         history.push(redirect); //set location after successful login
       })
       .catch((err) => {
-        console.log(err);
         if (typeof err.response !== 'undefined') {
           if (err.response.data.error.message === 'EMAIL_EXISTS') {
-            formikActions.setErrors({ email: 'Email already exists' });
+            formikActions.setStatus('Email already exists');
             dispatch(authFail(err.response.data.error));
           }
           if (err.response.data.error.message === 'EMAIL_NOT_FOUND') {
-            formikActions.setErrors({ email: 'Email not found' });
+            formikActions.setStatus('Email not found');
             dispatch(authFail(err.response.data.error));
           }
           if (err.response.data.error.message === 'INVALID_PASSWORD') {
-            formikActions.setErrors({ password: 'Invalid password' });
+            formikActions.setStatus('Invalid password');
             dispatch(authFail(err.response.data.error));
           }
         }

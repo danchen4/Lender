@@ -10,6 +10,7 @@ const StyledScButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -20,6 +21,11 @@ const StyledScButton = styled.button`
   }
 
   .icon {
+  }
+
+  @media ${({ theme }) => theme.bp.tabPort} {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   &:enabled {

@@ -11,9 +11,9 @@ export const MATERIAL_UI_THEME = {
       default: '#fafafa',
     },
     primary: {
-      light: '#e8f5e9',
-      main: '#c8e6c9',
-      dark: '#97b498',
+      light: '#80e27e',
+      main: '#4caf50',
+      dark: '#087f23',
       contrastText: '#fff',
     },
     secondary: {
@@ -29,8 +29,8 @@ export const MATERIAL_UI_THEME = {
       contrastText: '#fff',
     },
     text: {
-      primary: '#9e9e9e',
-      secondary: '#cfcfcf',
+      primary: '#424242',
+      secondary: '#868686',
       disabled: '#eeeeee',
       hint: '#e0e0e0',
     },

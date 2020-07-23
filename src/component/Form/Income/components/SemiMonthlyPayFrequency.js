@@ -1,6 +1,6 @@
 import React from 'react';
-import { MySelect } from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
-import { SEMIMONTHLY_DATE1_SELECT, SEMIMONTHLY_DATE2_SELECT } from '../constants';
+import { MySelect } from '../../../UI/FormikMUI';
+import { SEMIMONTHLY_DATE1_SELECT, SEMIMONTHLY_DATE2_SELECT } from '../../../../constants';
 import { Spacer, ScFlexBox } from '../../../UI/Styled';
 
 export const SemiMonthlyPayFrequency = () => {

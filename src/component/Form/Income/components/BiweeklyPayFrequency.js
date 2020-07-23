@@ -1,5 +1,5 @@
 import React from 'react';
-import MyCalender from '../../../UI/FormikMUI/fkmui-calender/fkmui-calender';
+import { MyCalender } from '../../../UI/FormikMUI';
 
 export const BiweeklyPayFrequency = () => {
   return (

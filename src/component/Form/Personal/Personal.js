@@ -2,45 +2,18 @@ import React, { useState, useEffect } from 'react';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionApp from '../../../store/actions';
-// MaterialUi
-import { makeStyles } from '@material-ui/core/styles';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 // Formik/Yup
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+// MaterialUi
+import { makeStyles } from '@material-ui/core/styles';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 // Components
-import { MyTextField } from '../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
-import MyMaskedTextField from '../../UI/FormikMUI/fkmui-textfield-masked/fkmui-textfield-masked';
+import { MyTextField, MyMaskedTextField, MySelectStates } from '../../UI/FormikMUI';
 import { Spacer, ScFlexBox, ScCard, ScHeader, ScTextBox, ScButton } from '../../UI/Styled';
-import MySelectStates from '../../UI/FormikMUI/fkmui-select-states/fkmui-select-states';
 // Misc.
 import { FormikData } from '../../../helper/FormikData';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: '30px',
-  },
-  box: {
-    padding: '0.5rem',
-  },
-  paper: {
-    maxWidth: '600px',
-    margin: 'auto',
-    borderRadius: '6px',
-    padding: theme.spacing(4),
-  },
-  button: {
-    margin: '1rem',
-    padding: '1rem 3rem',
-    backgroundColor: theme.palette.primary.dark,
-  },
-  valueDisplay: {
-    marginTop: '40px',
-    width: '500px',
-    margin: 'auto',
-    textAlign: 'left',
-  },
-}));
+import { ProgressBar } from '../../ProgressBar/ProgressBar';
 
 const PHONE_NUMBER_MASK = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 const DELIMITER = '-';
@@ -52,7 +25,7 @@ const validationSchema = Yup.object({
   address2: Yup.string().max(30),
   city: Yup.string().required(),
   state: Yup.string().required(),
-  zip: Yup.number('Zip code must be a number').required(),
+  zip: Yup.string().required().min(5).max(9),
   phone: Yup.string()
     .matches(/(^[0-9]+$)/, 'Please enter valid phone number')
     .required(),
@@ -70,9 +43,7 @@ const FIELD_VALUES = {
 };
 
 const FormUserName = ({ pathNext, history }) => {
-  console.log('<FormPersonal /> RENDER');
   const [firstTime, setFirstTime] = useState(true);
-  const classes = useStyles();
   const dispatch = useDispatch();
   const personalDataREDUX = useSelector((state) => state.application.personalData);
 
@@ -94,13 +65,6 @@ const FormUserName = ({ pathNext, history }) => {
     if (personalDataREDUX.phone.value || sessionPersonalData) setFirstTime(false);
   }, []);
 
-  // useEffect(() => {
-  //   console.log('setFirstTime');
-  //   if (personalDataREDUX.phone.value || sessionPersonalData) setFirstTime(false);
-  // }, [personalDataREDUX, sessionPersonalData]);
-
-  console.log(personalDataREDUX);
-
   const submitHandler = (values, actions) => {
     dispatch(actionApp.setPersonalData(values));
     sessionStorage.setItem('sessionPersonalData', JSON.stringify(values));
@@ -110,7 +74,8 @@ const FormUserName = ({ pathNext, history }) => {
   };
 
   return (
-    <div className={classes.root}>
+    <>
+      <ProgressBar />
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -120,7 +85,7 @@ const FormUserName = ({ pathNext, history }) => {
       >
         {({ initialValues, values, errors, dirty, isSubmitting, isValid }) => (
           <ScCard width={50} shadow="SmoothXs">
-            <ScHeader as="h2" fontSize={3} fontWeight={500} color="secondary" mBot={1} mTop={2}>
+            <ScHeader as="h2" fontSize={3} fontWeight={500} color="secondary" mBot={1} mTop={1}>
               Personal Information
             </ScHeader>
             <ScTextBox>
@@ -179,7 +144,7 @@ const FormUserName = ({ pathNext, history }) => {
                 type="submit"
                 disabled={(!dirty && firstTime) || !isValid}
               >
-                Next Step
+                Next
                 <KeyboardArrowRightIcon />
               </ScButton>
 
@@ -195,7 +160,7 @@ const FormUserName = ({ pathNext, history }) => {
           </ScCard>
         )}
       </Formik>
-    </div>
+    </>
   );
 };
 

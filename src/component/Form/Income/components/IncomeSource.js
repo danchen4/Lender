@@ -11,7 +11,7 @@ export const IncomeSource = ({ incomeSource, index }) => {
       <ScFlexBox justify="flex-start">
         <ScFlexItem basis="50%">
           <ScHeader as="h4" {...HEADER_FORMAT_1}>
-            Income Source {index + 1}
+            Income Source
           </ScHeader>
           <ScTextBox padding="0.3rem">
             {(incomeSource.employerData.employerName.value && 'Employment') ||

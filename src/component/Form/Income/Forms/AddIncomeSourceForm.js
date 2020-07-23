@@ -162,7 +162,6 @@ export const AddIncomeSourceForm = ({ showForm, toggleForm }) => {
               </ScFlexBox>
             </Spacer>
             <FormikData
-              show
               dirty={props.dirty}
               isValid={props.isValid}
               isSubmitting={props.isSubmitting}

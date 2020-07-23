@@ -1,11 +1,5 @@
 .AnimatedWordContainer {
-  height: 20px;
-  margin: 1rem 0 3rem 0;
-}
-
-.AnimatedWord {
-  color: black;
-  font-size: 18px;
+  margin: 3rem 0 4rem 0;
 }
 
 @keyframes custom-animation-in {

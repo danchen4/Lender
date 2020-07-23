@@ -8,8 +8,6 @@ export const withNetworkErrorHandler = (MyComponent) => {
   return (props) => {
     const [error, clearError] = useHttpErrorHandler(axios);
 
-    console.log('withErrorHandler', error);
-
     return (
       <React.Fragment>
         {error && <MyBackdrop clicked={clearError} />}

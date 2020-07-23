@@ -15,6 +15,7 @@ import classModule from './Income.module.css';
 // Misc.
 import { CARD_FORMAT_2 } from '../../../constants';
 import { IncomeSource } from './components/IncomeSource';
+import { ProgressBar } from '../../ProgressBar/ProgressBar';
 
 const FormEmployer = ({ pathNext, pathPrev, history }) => {
   const [showForm, setShowForm] = useState(false);
@@ -50,10 +51,9 @@ const FormEmployer = ({ pathNext, pathPrev, history }) => {
     setShowForm(!showForm);
   };
 
-  console.log('incomeDataREDUX', incomeDataREDUX);
-
   return (
     <>
+      <ProgressBar />
       <ScCard width={50} shadow="SmoothXs">
         <ScHeader as="h2" fontSize={3} fontWeight={500} color="secondary" mBot={1} mTop={2}>
           Source of Income
@@ -138,7 +138,7 @@ const FormEmployer = ({ pathNext, pathPrev, history }) => {
               disabled={incomeDataREDUX.length === 0}
               onClick={nextStep}
             >
-              Next Step
+              Next
               <KeyboardArrowRightIcon />
             </ScButton>
           </ScFlexBox>

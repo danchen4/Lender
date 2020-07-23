@@ -2,54 +2,35 @@ import React from 'react';
 // Redux
 import { useSelector } from 'react-redux';
 // Router
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import logo from '../../images/lender-logo.png';
+// Components
+import { ScLink, ScHeader, ScFlexBox } from '../UI/Styled';
+// Misc.
+import { COLOR } from '../../theme';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     zIndex: '99',
   },
+  color: {
+    backgroundColor: COLOR.light.grey1,
+  },
   toolBar: {
     height: '52px',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  link: {
-    color: theme.palette.secondary.main,
-    textDecoration: 'none',
-    fontWeight: '500',
-    fontSize: '1.4rem',
-    [theme.breakpoints.up('sm')]: {
-      fontSize: '1.6rem',
-    },
-  },
-  button: {
-    flexGrow: 1,
-    height: '100%',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: 'transparent',
-    border: 'none',
-    cursor: 'pointer',
+    justifyContent: 'space-between',
   },
   icon: {
-    color: theme.palette.secondary.main,
+    color: theme.palette.text.primary,
     height: '3rem',
     width: '3rem',
-  },
-  logo: {
-    [theme.breakpoints.down('sm')]: {
-      width: '160px',
-    },
   },
 }));
 
@@ -63,7 +44,7 @@ export const ButtonAppBar = (props) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="primary">
+      <AppBar position="static" color="primary" classes={{ colorPrimary: classes.color }}>
         <Toolbar className={classes.toolBar}>
           <IconButton
             edge="start"
@@ -74,17 +55,27 @@ export const ButtonAppBar = (props) => {
           >
             <MenuIcon classes={{ root: classes.icon }} />
           </IconButton>
-          <div className={classes.button} onClick={goHome}>
-            <img className={classes.logo} src={logo} alt="logo" />
-          </div>
+          <ScLink to="/">
+            <ScFlexBox>
+              {/* <Logo2
+                width="5rem"
+                height="5rem"
+                defaultColor="#000"
+                fillColor={COLOR.main.secondary}
+              /> */}
+              <ScHeader color="secondary" fontSize={3}>
+                LENDER
+              </ScHeader>
+            </ScFlexBox>
+          </ScLink>
           {tokenREDUX ? (
-            <Link className={classes.link} to="/logout">
+            <ScLink color="text" to="/logout">
               Logout
-            </Link>
+            </ScLink>
           ) : (
-            <Link className={classes.link} to="/login">
+            <ScLink color="text" to="/login">
               Login
-            </Link>
+            </ScLink>
           )}
         </Toolbar>
       </AppBar>

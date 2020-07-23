@@ -1,117 +1,85 @@
 import React from 'react';
-
-import { Button, Typography, Paper, Box } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { purple } from '@material-ui/core/colors';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-
+// Redux
+import { useSelector } from 'react-redux';
+// Router
+import { useHistory } from 'react-router-dom';
+// Components
 import WordCarousel from '../UI/CustomUI/WordCarousel/WordCarousel';
+import { ScCard, ScHeader, ScButton } from '../../component/UI/Styled';
+// CSS
+import styled from 'styled-components';
+// Misc.
+import shoppingVideo from '../../images/shopping.mp4';
 
-import classModule from './Home.module.css';
-import ButtonTransition from '../UI/CustomUI/ButtonTransition/ButtonTransition';
+const StyledContainer = styled.section`
+  margin-top: -5rem;
+  margin-bottom: -5rem;
+  width: 100vw;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media ${({ theme }) => theme.bp.phone} {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    padding: 0 0.5rem;
+  }
+`;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    // marginTop: '30px',
-  },
-  header1: {
-    padding: '1rem 0',
-  },
-  header2: {
-    padding: '1rem 0',
-  },
-  box: {
-    padding: '0.5rem',
-  },
-  paper: {
-    maxWidth: '600px',
-    margin: 'auto',
-    borderRadius: '6px',
-    padding: theme.spacing(2),
-  },
-  card: {
-    boxShadow: '0 5px 10px -3px rgba(0, 0, 0, 0.1)',
-    maxWidth: '500px',
-    margin: '0 auto',
-  },
-  cardContent: {
-    padding: '0',
-    '&:last-child': {
-      paddingBottom: 8,
-    },
-  },
-  spacer: {
-    margin: '24px 0',
-  },
-  button: {
-    margin: '1rem',
-    backgroundColor: theme.palette.primary.dark,
-  },
-}));
+const VideoContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(0, 109, 179, 0.8),
+    rgba(99, 204, 255, 0.8)
+  );
+`;
+
+const Video = styled.video`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.05;
+`;
+
+const WORD_ARRAY = ['Get What You Need Today', 'And Pay Later'];
 
 const Home = (props) => {
-  const classes = useStyles();
-  const wordArray = ['Get What You Need', 'Today', 'And Pay Later'];
+  const history = useHistory();
+  const isAuthenticated = useSelector((state) => state.auth.token !== null);
 
   return (
-    <React.Fragment>
-      <div className={classModule.Banner}>
-        <div className={classModule.BannerCard}>
-          <h3 className={classModule.BannerText}>Shop Now.</h3>
-          <h3 className={classModule.BannerText}>Pay Later.</h3>
-          <WordCarousel wordArray={wordArray} />
-          <ButtonTransition>APPLY NOW</ButtonTransition>
+    <StyledContainer>
+      <VideoContainer>
+        <Video autoPlay muted loop>
+          <source src={shoppingVideo} type="video/mp4" />
+          Your browser is not supported
+        </Video>
+      </VideoContainer>
+      <ScCard padding="4rem" width={45} shadow="SmoothXs" colorGrade="light" bgColor="grey1">
+        <div>
+          <ScHeader as="h1" fontSize={3} fontWeight={700} color="secondary">
+            Shop Now. Pay Later.
+          </ScHeader>
+
+          <ScHeader as="h1" fontSize={3} fontWeight={700} color="secondary"></ScHeader>
+          <WordCarousel wordArray={WORD_ARRAY} />
+          <ScButton
+            variant="secondary"
+            onClick={() => {
+              history.push({ pathname: `${isAuthenticated ? '/personalinfo' : '/signup'}` });
+            }}
+          >
+            APPLY NOW
+          </ScButton>
         </div>
-      </div>
-      <div className={classModule.GridArea}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <Card className={classes.card}>
-              <CardContent className={classes.cardContent}>
-                <div className={classModule.CardHeader}>
-                  <Typography variant="h6" className={classes.header2}>
-                    <span className={classModule.Darken}>Learn More </span>
-                  </Typography>
-                </div>
-                <div className={classModule.CardBody}>
-                  <div className={classModule.CardSection}>
-                    <div>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis consectetur
-                      ratione nemo dicta quo. Deleniti sunt, fuga ipsum vitae nostrum earum officiis
-                      autem mollitia, perspiciatis assumenda fugiat expedita voluptatum quasi.
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Card className={classes.card}>
-              <CardContent className={classes.cardContent}>
-                <div className={classModule.CardHeader}>
-                  <Typography variant="h6" className={classes.header2}>
-                    <span className={classModule.Darken}>FAQ </span>
-                  </Typography>
-                </div>
-                <div className={classModule.CardBody}>
-                  <div className={classModule.CardSection}>
-                    <div>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis consectetur
-                      ratione nemo dicta quo. Deleniti sunt, fuga ipsum vitae nostrum earum officiis
-                      autem mollitia, perspiciatis assumenda fugiat expedita voluptatum quasi.
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </div>
-    </React.Fragment>
+      </ScCard>
+    </StyledContainer>
   );
 };
 

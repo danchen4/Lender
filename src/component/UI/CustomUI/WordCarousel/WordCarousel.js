@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { AnimateOnChange, HideUntilLoaded } from 'react-animation';
-
+import { AnimateOnChange } from 'react-animation';
+import styled from 'styled-components';
 import './WordCarousel.css';
+import { COLOR } from '../../../../theme';
+
+const StyledAnimate = styled(AnimateOnChange)`
+  font-size: 3rem;
+  font-weight: 700;
+  color: ${COLOR.main.grey2};
+  @media ${({ theme }) => theme.bp.phone} {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+`;
 
 const WordCarousel = ({ wordArray }) => {
-  console.log('RENDER');
   const [current, setCurrent] = useState(0);
   let delay = 2000;
 
@@ -24,13 +34,12 @@ const WordCarousel = ({ wordArray }) => {
   return (
     <React.Fragment>
       <div className="AnimatedWordContainer">
-        <AnimateOnChange
+        <StyledAnimate
           animationIn="custom-animation-in 800ms ease-out"
           animationOut="custom-animation-out 800ms ease-out"
-          className="AnimatedWord"
         >
           {wordArray[current]}
-        </AnimateOnChange>
+        </StyledAnimate>
       </div>
     </React.Fragment>
   );

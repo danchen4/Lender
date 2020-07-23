@@ -1,25 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { COLOR } from '../../../theme';
 
 const StyledScTextBox = styled.p`
-  font-size: 1.4rem;
+  font-size: ${({ fontSize }) => (fontSize || 1.4) + 'rem'};
   line-height: 1.7;
   padding: ${({ padding }) => padding || '1rem'};
-  color: ${({ secondary, theme }) => secondary && theme.palette.text.secondary};
+  color: ${({ color, colorGrade, theme }) =>
+    COLOR[colorGrade || 'main'][color] || theme.palette.text.primary};
   font-weight: ${({ weight }) => weight || 400};
 `;
 
-export const ScTextBox = ({ secondary, padding, weight, children }) => {
+export const ScTextBox = ({ fontSize, color, colorGrade, padding, weight, children }) => {
   return (
-    <StyledScTextBox secondary={secondary} padding={padding} weight={weight}>
+    <StyledScTextBox
+      fontSize={fontSize}
+      color={color}
+      colorGrade={colorGrade}
+      padding={padding}
+      weight={weight}
+    >
       {children}
     </StyledScTextBox>
   );
 };
 
 ScTextBox.propTypes = {
-  secondary: PropTypes.bool,
-  padding: PropTypes.string,
+  fontSize: PropTypes.number,
   weight: PropTypes.number,
+  color: PropTypes.oneOf(['primary', 'secondary', 'error', 'text', 'grey1', 'grey2', 'grey3']),
+  colorGrade: PropTypes.oneOf(['main', 'light']),
+  padding: PropTypes.string,
 };

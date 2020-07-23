@@ -1,11 +1,14 @@
 import React from 'react';
 // Material UI
-import { MyTextField } from '../../../UI/FormikMUI/fkmui-textfield-outline/fkmui-textfield-outline';
 import { Typography } from '@material-ui/core';
 import { Spacer, ScFlexBox } from '../../../UI/Styled';
 // Components
-import { MySelectStates } from '../../../UI/FormikMUI/fkmui-select-states/fkmui-select-states';
-import { MySelect } from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
+import {
+  MyTextField,
+  MySelectStates,
+  MySelect,
+  MyMaskedTextFieldCurrency,
+} from '../../../UI/FormikMUI';
 import {
   WeeklyPayFrequency,
   BiweeklyPayFrequency,
@@ -13,9 +16,9 @@ import {
   MonthlyPayFrequency,
 } from '../components';
 import { ScTextBox } from '../../../UI/Styled/ScTextBox';
-import { MyMaskedTextFieldCurrency } from '../../../UI/FormikMUI/fkmui-textfield-masked-currency/fkmui-textfield-masked-currency';
+
 // Misc.
-import { PAY_FREQUENCY_SELECT } from '../constants';
+import { PAY_FREQUENCY_SELECT } from '../../../../constants';
 
 export const AddEmployerIncomeForm = (props) => {
   return (
@@ -64,27 +67,12 @@ export const AddEmployerIncomeForm = (props) => {
             required
             customStyle={{ width: 45 }}
           />
-          <MyTextField
-            name="grossIncome"
-            label="Gross Income"
-            required
-            customStyle={{ width: 45 }}
-          />
-
           <MyMaskedTextFieldCurrency
             name="grossIncome"
             label="Gross Income"
             required
             customStyle={{ width: 45 }}
           />
-          {/* <MyMaskedTextField
-            name="grossIncome"
-            label="Gross Income"
-            maskInput={NUMBER_MASK}
-            delimiter=","
-            required
-            customStyle={{ width: 45 }}
-          /> */}
         </ScFlexBox>
       </Spacer>
 

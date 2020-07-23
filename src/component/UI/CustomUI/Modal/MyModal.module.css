@@ -1,34 +1,23 @@
 .Modal {
-  position: fixed;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 500;
-  background-color: white;
-  width: 70%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 2px 2px 3px #ccc;
-  padding: 16px;
-  left: 15%;
-  top: 30%;
-  box-sizing: border-box;
+  max-width: 50rem;
+  width: 100%;
+  padding: 0 1rem;
   animation: animate-in 300ms ease-out;
-}
-
-@media (min-width: 500px) {
-  .Modal {
-    width: 500px;
-    left: calc(50% - 250px);
-    top: calc(50% - 250px);
-  }
 }
 
 @keyframes animate-in {
   0% {
     opacity: 0;
-    transform: translateY(-100%);
+    /* transform: translateY(-100%); */
   }
 
   100% {
     opacity: 1;
-    transform: none;
+    /* transform: none; */
   }
 }

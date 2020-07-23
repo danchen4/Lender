@@ -1,6 +1,6 @@
 import React from 'react';
-import MySelect from '../../../UI/FormikMUI/fkmui-select/fkmui-select';
-import { WEEKLY_PAYDATE_SELECT } from '../constants';
+import { MySelect } from '../../../UI/FormikMUI';
+import { WEEKLY_PAYDATE_SELECT } from '../../../../constants';
 
 export const WeeklyPayFrequency = () => {
   return (
