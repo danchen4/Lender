@@ -14,7 +14,7 @@ Redux is used for state management. Session storage is used to store filled-in a
 
 # URL
 
-https://ring-commerce.web.app
+https://loan-application-formik.web.app
 
 # Author
 
