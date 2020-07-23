@@ -1,4 +1,4 @@
-# Ring Builder Site
+# Lender Site
 
 Loan application site using React.
 
