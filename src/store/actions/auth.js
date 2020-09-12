@@ -87,6 +87,33 @@ export const loginAccount = (formikValues, formikActions, isSignUp, redirect, hi
   };
 };
 
+export const guestLoginAccount = (redirect, history) => {
+  return (dispatch) => {
+    const authData = {
+      returnSecureToken: true,
+    };
+    dispatch(authStart);
+    let url =
+      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBsThRZYZdkCxZOt2QXRDW6ARulOx6VN74';
+    axios
+      .post(url, authData)
+      .then((response) => {
+        console.log('action - loginAccount(): RESPONSE', response.data);
+        const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+        localStorage.setItem('token', response.data.idToken);
+        localStorage.setItem('expirationDate', expirationDate);
+        localStorage.setItem('userId', response.data.localId);
+        dispatch(authSuccess(response.data.idToken, response.data.localId));
+        dispatch(checkAuthTimeout(response.data.expiresIn));
+        history.push(redirect); //set location after successful login
+      })
+      .catch((err) => {
+        dispatch(authFail(err.response.data.error));
+        console.log('error - poops');
+      });
+  };
+};
+
 export const checkLoginState = () => {
   return (dispatch) => {
     const token = localStorage.getItem('token');

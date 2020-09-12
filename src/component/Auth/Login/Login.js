@@ -33,6 +33,8 @@ const SignIn = ({ pathNext, history }) => {
   const loading = useSelector((state) => state.auth.loading);
   const onLogin = (values, actions, isSignUp, redirect, history) =>
     dispatch(actionAuth.loginAccount(values, actions, isSignUp, redirect, history));
+  const onGuestLogin = (redirect, history) =>
+    dispatch(actionAuth.guestLoginAccount(redirect, history));
 
   const submitHandler = async (values, actions) => {
     actions.setSubmitting(true);
@@ -45,17 +47,17 @@ const SignIn = ({ pathNext, history }) => {
 
   return (
     <>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={(values, actions) => {
-          submitHandler(values, actions);
-        }}
-      >
-        {({ values, errors, status, dirty, isValid }) => (
-          <>
-            {status && <ErrorModal message={status} />}
-            <ScCard shadow="SmoothXs">
+      <ScCard shadow="SmoothXs">
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={(values, actions) => {
+            submitHandler(values, actions);
+          }}
+        >
+          {({ values, errors, status, dirty, isValid }) => (
+            <>
+              {status && <ErrorModal message={status} />}
               <ScHeader {...HEADER_FORMAT_3}>Log In</ScHeader>
               <Form>
                 <Spacer>
@@ -85,22 +87,35 @@ const SignIn = ({ pathNext, history }) => {
                   {loading && <CircularSpinner />}
                 </ScButton>
 
-                <Spacer>
-                  <div className={classModule.AccountSwitch}>
-                    <ScTextBox color="text" colorGrade="light" weight={500}>
-                      Don't have an account?
-                    </ScTextBox>
-                    <ScLink to="/signup" color="secondary">
-                      Sign Up
-                    </ScLink>
-                  </div>
-                </Spacer>
                 <FormikData values={values} errors={errors} />
               </Form>
-            </ScCard>
-          </>
-        )}
-      </Formik>
+            </>
+          )}
+        </Formik>
+
+        <Spacer mTop={1} mBot={1}>
+          <ScTextBox color="text" colorGrade="light" weight={500}>
+            --- OR ---
+          </ScTextBox>
+        </Spacer>
+
+        <ScButton variant="secondary" onClick={() => onGuestLogin(pathNext, history)}>
+          Continue as Guest
+          <KeyboardArrowRightIcon />
+          {loading && <CircularSpinner />}
+        </ScButton>
+
+        <Spacer>
+          <div className={classModule.AccountSwitch}>
+            <ScTextBox color="text" colorGrade="light" weight={500}>
+              Don't have an account?
+            </ScTextBox>
+            <ScLink to="/signup" color="secondary">
+              Sign Up
+            </ScLink>
+          </div>
+        </Spacer>
+      </ScCard>
     </>
   );
 };
